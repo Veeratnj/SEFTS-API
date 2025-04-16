@@ -1,6 +1,6 @@
 
 
-# from app.models.models import User
+from app.models.models import StockDetails
 
 
 # def user_add(db,user,):
@@ -28,3 +28,17 @@
 #         'is_subscribe':new_user.is_subscribe
 #     }
 #     return result
+
+
+
+def get_all_stock_name_service(db):
+    try:
+    
+        result=db.query(StockDetails.stock_name,StockDetails.token).all()
+        print(result)
+        result = {stock_name: token for stock_name, token in result}
+
+        return result
+    except Exception as e:
+        print(f"Error retrieving stock names: {e}")
+        raise

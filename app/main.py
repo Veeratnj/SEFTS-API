@@ -30,7 +30,7 @@ app.add_middleware(TimerMiddleware)
 
 def create_app():
     models.Base.metadata.create_all(bind=engine)
-    # app.include_router(common.router, prefix="/common")
+    app.include_router(common.router, prefix="/common")
     app.include_router(websocket.router, prefix="/websocket")
     return app
 

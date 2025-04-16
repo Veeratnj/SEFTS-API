@@ -81,3 +81,14 @@
 2025-04-14 22:33:54,446 - INFO - Client python-client-123 connected successfully
 2025-04-14 22:35:39,199 - INFO - Client python-client-123 attempting to connect
 2025-04-14 22:35:39,578 - INFO - Client python-client-123 connected successfully
+2025-04-16 07:50:59,066 - INFO - Incoming request: GET http://127.0.0.1:8000/get/stock/tocken
+2025-04-16 07:50:59,067 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-16 07:51:19,409 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-16 07:51:19,409 - INFO - Response status: 405 (Processed in 0.0002 seconds)
+2025-04-16 07:51:34,291 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-16 07:51:34,293 - INFO - Response status: 500 (Processed in 0.0012 seconds)
+2025-04-16 07:52:20,165 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-16 07:52:20,166 - INFO - Response status: 500 (Processed in 0.0013 seconds)
+2025-04-16 07:53:35,090 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-16 07:55:22,158 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-16 07:55:22,162 - INFO - Response status: 200 (Processed in 0.0043 seconds)
