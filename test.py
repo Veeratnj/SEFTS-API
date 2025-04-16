@@ -1,44 +1,35 @@
-# package import statement
-from SmartApi import SmartConnect #or from SmartApi.smartConnect import SmartConnect
-import pyotp
-from logzero import logger
-import pandas as pd
-import app.credentials.creds as creds
+import asyncio
+import websockets
+import json
 
-api_key = creds.api_key
-username = creds.username
-pwd = creds.pwd
-smartApi = SmartConnect(api_key)
-try:
-    token = creds.token
-    totp = pyotp.TOTP(token).now()
-except Exception as e:
-    logger.error("Invalid Token: The provided token is not valid.")
-    raise e
+async def call_websocket():
+    # Define the WebSocket URL and client ID
+    client_id = "python-client-123"  # Unique client ID
+    uri = f"ws://localhost:8000/websocket/ws?client_id={client_id}"  # Corrected URL
 
-correlation_id = "abcde"
-data = smartApi.generateSession(username, pwd, totp)
+    try:
+        async with websockets.connect(uri,) as websocket:  # Increased timeout
+            print("WebSocket connected")
 
+            # Send a JSON payload with tokens to subscribe
+            payload = {
+                "tokens": ["26000", "26009", "26037"]  # Replace with desired tokens
+            }
+            await websocket.send(json.dumps(payload))
+            print(f"Sent subscription request: {payload}")
 
-#data['data'] = ['clientcode', 'name', 'email', 'mobileno', 'exchanges', 'products', 'lastlogintime', 'broker', 'jwtToken', 'refreshToken', 'feedToken']
+            # Receive messages from the server
+            try:
+                while True:
+                    response = await websocket.recv()
+                    data = json.loads(response)
+                    print("Message from server:", data)
+            except websockets.ConnectionClosed:
+                print("WebSocket connection closed")
+    except asyncio.TimeoutError:
+        print("WebSocket connection timed out")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
 
-print((data['data'].keys()))
-
-
-
-params = {
-    "exchange": "NSE",
-    "symboltoken": "11536",  
-    "interval": "FIVE_MINUTE",  
-    "fromdate": "2024-04-04 09:15",  
-    "todate": "2024-04-04 15:30"
-}
-
-response = smartApi.getCandleData(params)
-
-if 'data' in response:
-    df = pd.DataFrame(response['data'], columns=["datetime", "open", "high", "low", "close", "volume"])
-    df["datetime"] = pd.to_datetime(df["datetime"])
-    print(df.head())
-else:
-    print("❌ Error fetching candle data:", response)
+# Run the WebSocket client
+asyncio.run(call_websocket())

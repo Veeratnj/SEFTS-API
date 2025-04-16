@@ -1,0 +1,83 @@
+2025-04-14 00:42:54,503 - INFO - Incoming request: GET http://localhost:8000/websocket/ws?client_id=veera123
+2025-04-14 00:42:54,503 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 00:45:37,745 - INFO - Incoming request: GET http://localhost:8000/websocket/ws?client_id=veera123
+2025-04-14 00:45:37,745 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 00:46:16,701 - INFO - Incoming request: GET http://localhost:8000/websocket/ws?client_id=veera123
+2025-04-14 00:46:16,702 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:18:36,629 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:18:36,629 - INFO - Response status: 404 (Processed in 0.0003 seconds)
+2025-04-14 21:18:36,641 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:18:36,641 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:20:20,848 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:20:20,848 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:20:26,845 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:20:26,845 - INFO - Response status: 404 (Processed in 0.0003 seconds)
+2025-04-14 21:20:38,844 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:20:38,845 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:20:46,844 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:20:46,845 - INFO - Response status: 404 (Processed in 0.0003 seconds)
+2025-04-14 21:20:51,846 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:20:51,846 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:21:23,845 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:21:23,845 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:21:36,849 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:21:36,849 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:21:41,846 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:21:41,846 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:21:49,846 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:21:49,846 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:21:56,847 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:21:56,847 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:22:01,850 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:22:01,851 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:22:10,855 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:22:10,855 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:22:10,867 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:22:10,867 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:26:37,449 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:26:37,450 - INFO - Response status: 404 (Processed in 0.0003 seconds)
+2025-04-14 21:26:37,461 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:26:37,461 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:26:38,661 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:26:38,662 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:26:38,673 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:26:38,673 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:26:56,250 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:26:56,250 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:26:56,261 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:26:56,262 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:26:57,514 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:26:57,514 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:26:57,526 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:26:57,526 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:27:39,311 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:27:39,311 - INFO - Response status: 404 (Processed in 0.0003 seconds)
+2025-04-14 21:27:39,323 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:27:39,323 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:31:01,292 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:31:01,293 - INFO - Response status: 404 (Processed in 0.0004 seconds)
+2025-04-14 21:31:01,306 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:31:01,306 - INFO - Response status: 404 (Processed in 0.0003 seconds)
+2025-04-14 21:33:52,647 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:33:52,647 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:33:52,658 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/wc
+2025-04-14 21:33:52,659 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:38:11,322 - INFO - Incoming request: GET http://127.0.0.1:8000/ws?client_id=unique-client-id
+2025-04-14 21:38:11,323 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:38:11,334 - INFO - Incoming request: GET http://127.0.0.1:8000/ws?client_id=unique-client-id
+2025-04-14 21:38:11,334 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:38:13,906 - INFO - Incoming request: GET http://127.0.0.1:8000/ws?client_id=unique-client-id
+2025-04-14 21:38:13,907 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:38:15,079 - INFO - Incoming request: GET http://127.0.0.1:8000/ws?client_id=unique-client-id
+2025-04-14 21:38:15,079 - INFO - Response status: 404 (Processed in 0.0003 seconds)
+2025-04-14 21:38:35,242 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/ws?client_id=unique-client-id
+2025-04-14 21:38:35,242 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:38:35,254 - INFO - Incoming request: GET http://127.0.0.1:8000/websockets/ws?client_id=unique-client-id
+2025-04-14 21:38:35,254 - INFO - Response status: 404 (Processed in 0.0002 seconds)
+2025-04-14 21:51:39,890 - INFO - Client python-client-123 connected
+2025-04-14 21:52:08,869 - INFO - Websocket connected
+2025-04-14 21:57:02,531 - INFO - Websocket connected
+2025-04-14 22:33:54,446 - INFO - Client python-client-123 attempting to connect
+2025-04-14 22:33:54,446 - INFO - Client python-client-123 connected successfully
+2025-04-14 22:35:39,199 - INFO - Client python-client-123 attempting to connect
+2025-04-14 22:35:39,578 - INFO - Client python-client-123 connected successfully

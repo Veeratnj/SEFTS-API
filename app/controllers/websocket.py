@@ -1,127 +1,45 @@
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from SmartApi import SmartConnect
-from smartWebSocketV2 import SmartWebSocketV2
-import pyotp
-import creds  # Placeholder — later to be fetched from DB
-from logzero import logger
+import logging
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
+from app.services.stock_services import get_live_stock_prices
+from typing import List
 import asyncio
-from app.db.meta_data import token_map
 
 router = APIRouter()
 
-# ----------------------------
-# WebSocket Connection Manager
-# ----------------------------
-class ConnectionManager:
-    def __init__(self):
-        self.active_connections: dict[str, WebSocket] = {}
-        self.client_subscriptions: dict[str, set] = {}
-        self.smart_clients: dict[str, SmartWebSocketV2] = {}
-
-    async def connect(self, websocket: WebSocket, client_id: str):
-        await websocket.accept()
-        self.active_connections[client_id] = websocket
-        self.client_subscriptions[client_id] = set()
-
-    def disconnect(self, client_id: str):
-        self.active_connections.pop(client_id, None)
-        self.client_subscriptions.pop(client_id, None)
-
-        # Close the user's websocket
-        sws = self.smart_clients.pop(client_id, None)
-        if sws:
-            sws.close_connection()
-
-    async def send_message(self, message: str, client_id: str):
-        if client_id in self.active_connections:
-            await self.active_connections[client_id].send_text(message)
-
-
-manager = ConnectionManager()
-
-# ----------------------------
-# WebSocket Callbacks
-# ----------------------------
-def make_callbacks(client_id: str):
-    def on_open(wsapp):
-        logger.info(f"[{client_id}] WebSocket opened.")
-
-    def on_data(wsapp, message):
-        try:
-            ticks = message.get("data", [])
-            for tick in ticks:
-                token = tick.get("token")
-                ltp = tick.get("ltp") / 100.0
-
-                stock_name = next((name for name, details in token_map.items() if token in details["tokens"]), None)
-                if stock_name and stock_name in manager.client_subscriptions.get(client_id, set()):
-                    msg = f"{stock_name} LTP: {ltp}"
-                    asyncio.create_task(manager.send_message(msg, client_id))
-        except Exception as e:
-            logger.error(f"[{client_id}] Tick error: {e}")
-
-    def on_error(wsapp, error):
-        logger.error(f"[{client_id}] WebSocket error: {error}")
-
-    def on_close(wsapp):
-        logger.info(f"[{client_id}] WebSocket closed")
-
-    return on_open, on_data, on_error, on_close
-
-# ----------------------------
-# WebSocket Endpoint
-# ----------------------------
-@router.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket, client_id: str):
-    await manager.connect(websocket, client_id)
-
+@router.websocket("/ws/stocks1")
+async def websocket_endpoint1(websocket: WebSocket):
+    print("WebSocket connection established")
+    await websocket.accept()
     try:
-        # Get user-specific creds (can later be replaced with DB lookup)
-        api_key = creds.api_key
-        username = creds.username
-        pwd = creds.pwd
-        token = creds.token
+        while True:
+            data = await websocket.receive_json()
+            tokens = data.get("tokens", [])
+            live_prices = await get_live_stock_prices(tokens)
+            logging.debug(f"Sending live prices: {live_prices}")
+            await websocket.send_json({"live_prices": live_prices})
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        print("WebSocket disconnected")
 
-        # Generate TOTP and session
-        totp = pyotp.TOTP(token).now()
-        smartApi = SmartConnect(api_key)
-        data = smartApi.generateSession(username, pwd, totp)
 
-        # Start individual WebSocket
-        smw = SmartWebSocketV2(
-            client_code=data['data']['clientcode'],
-            auth_token=data['data']['jwtToken'],
-            feed_token=data['data']['feedToken'],
-            api_key=api_key,
-        )
-
-        # Set callbacks for this user's socket
-        on_open, on_data, on_error, on_close = make_callbacks(client_id)
-        smw.on_open = on_open
-        smw.on_data = on_data
-        smw.on_error = on_error
-        smw.on_close = on_close
-
-        # Store the user-specific WebSocket
-        manager.smart_clients[client_id] = smw
-
-        # Start the socket connection
-        smw.connect()
+@router.websocket("/ws/stocks")
+async def websocket_endpoint(websocket: WebSocket):
+    print("WebSocket connection established")
+    await websocket.accept()
+    try:
+        # Receive the initial message with client_id and tokens
+        initial_data = await websocket.receive_json()
+        client_id = initial_data.get("client_id")
+        tokens = initial_data.get("tokens", [])
+        print(f"Client ID: {client_id}, Tokens: {tokens}")
 
         while True:
-            data = await websocket.receive_text()
-            if data in token_map:
-                # Subscribe to token
-                subscription_data = token_map[data]
-                manager.client_subscriptions[client_id].add(data)
-                smw.subscribe("corr_id_" + client_id, 1, [subscription_data])
-                await manager.send_message(f"Subscribed to {data}", client_id)
-
+            # Fetch live stock prices for the tokens
+            live_prices = await get_live_stock_prices(tokens)
+            # Convert the dictionary to a list of values
+            live_prices_list = list(live_prices.values())
+            logging.debug(f"Sending live prices to client {client_id}: {live_prices_list}")
+            await websocket.send_json({"client_id": client_id, "live_prices": live_prices_list})
+            await asyncio.sleep(1)
     except WebSocketDisconnect:
-        manager.disconnect(client_id)
-        logger.info(f"[{client_id}] Disconnected")
-
-    except Exception as e:
-        logger.error(f"[{client_id}] Error: {e}")
-        manager.disconnect(client_id)
-        await websocket.close()
+        print(f"WebSocket disconnected for client {client_id}")

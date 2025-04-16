@@ -1,7 +1,7 @@
 from app.middleware.middleware import TimerMiddleware
 from fastapi import FastAPI
 from app.models import models
-from app.controllers import common
+from app.controllers import common,websocket
 from fastapi.middleware.cors import CORSMiddleware
 from app.db.db import engine
 
@@ -18,19 +18,20 @@ def hc():
 app.add_middleware(TimerMiddleware)
 
 # Configure CORS settings
-origins = ["*"]
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# origins = ["*"]
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 
 def create_app():
     models.Base.metadata.create_all(bind=engine)
-    app.include_router(common.router, prefix="/common")
+    # app.include_router(common.router, prefix="/common")
+    app.include_router(websocket.router, prefix="/websocket")
     return app
 
 
