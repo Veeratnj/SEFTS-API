@@ -34,11 +34,18 @@ from app.models.models import StockDetails
 def get_all_stock_name_service(db):
     try:
     
-        result=db.query(StockDetails.stock_name,StockDetails.token).all()
+        result=db.query(StockDetails.stock_name,StockDetails.token,StockDetails.ltp).all()
         print(result)
-        result = {stock_name: token for stock_name, token in result}
+        output_structured = []
 
-        return result
+        for stock_name, token, ltp in result:
+            output_structured.append({
+                "name": stock_name,
+                "token": token,
+                "points": ltp,
+            })
+
+        return output_structured
     except Exception as e:
         print(f"Error retrieving stock names: {e}")
         raise
