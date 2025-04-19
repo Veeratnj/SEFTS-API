@@ -14,6 +14,7 @@ async def websocket_endpoint1(websocket: WebSocket):
         while True:
             data = await websocket.receive_json()
             tokens = data.get("tokens", [])
+            print(f"Received tokens: {tokens}")
             live_prices = await get_live_stock_prices(tokens)
             logging.debug(f"Sending live prices: {live_prices}")
             await websocket.send_json({"live_prices": live_prices})

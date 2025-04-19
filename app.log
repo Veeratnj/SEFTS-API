@@ -92,3 +92,273 @@
 2025-04-16 07:53:35,090 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
 2025-04-16 07:55:22,158 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
 2025-04-16 07:55:22,162 - INFO - Response status: 200 (Processed in 0.0043 seconds)
+2025-04-18 08:37:37,504 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-18 08:37:37,516 - INFO - Response status: 200 (Processed in 0.0114 seconds)
+2025-04-18 08:37:37,521 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-18 08:37:37,531 - INFO - Response status: 200 (Processed in 0.0061 seconds)
+2025-04-18 08:37:37,538 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-18 08:37:37,546 - INFO - Response status: 200 (Processed in 0.0083 seconds)
+2025-04-18 08:37:37,555 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-18 08:37:37,561 - INFO - Response status: 200 (Processed in 0.0047 seconds)
+2025-04-18 08:39:00,742 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-18 08:39:00,751 - INFO - Response status: 200 (Processed in 0.0082 seconds)
+2025-04-18 08:39:00,764 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-18 08:39:00,782 - INFO - Response status: 200 (Processed in 0.0173 seconds)
+2025-04-18 08:39:00,796 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-18 08:39:00,804 - INFO - Response status: 200 (Processed in 0.0067 seconds)
+2025-04-18 08:39:00,816 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-18 08:39:00,821 - INFO - Response status: 200 (Processed in 0.0058 seconds)
+2025-04-18 08:46:08,814 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-18 08:46:08,836 - INFO - Response status: 200 (Processed in 0.0219 seconds)
+2025-04-18 08:46:08,849 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-18 08:46:08,862 - INFO - Response status: 200 (Processed in 0.0094 seconds)
+2025-04-18 08:46:08,871 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-18 08:46:08,877 - INFO - Response status: 200 (Processed in 0.0047 seconds)
+2025-04-18 08:46:08,888 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-18 08:46:08,895 - INFO - Response status: 200 (Processed in 0.0069 seconds)
+2025-04-18 09:11:21,768 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-18 09:11:21,780 - INFO - Response status: 200 (Processed in 0.0117 seconds)
+2025-04-18 09:11:21,792 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-18 09:11:21,800 - INFO - Response status: 200 (Processed in 0.0074 seconds)
+2025-04-18 09:11:21,810 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-18 09:11:21,817 - INFO - Response status: 200 (Processed in 0.0077 seconds)
+2025-04-18 09:11:21,828 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-18 09:11:21,835 - INFO - Response status: 200 (Processed in 0.0068 seconds)
+2025-04-18 09:31:09,776 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-18 09:31:10,365 - INFO - Response status: 200 (Processed in 0.5893 seconds)
+2025-04-18 09:31:10,408 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-18 09:31:10,413 - INFO - Response status: 200 (Processed in 0.0050 seconds)
+2025-04-18 09:31:10,447 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-18 09:31:10,457 - INFO - Response status: 200 (Processed in 0.0101 seconds)
+2025-04-18 09:31:10,501 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-18 09:31:10,508 - INFO - Response status: 200 (Processed in 0.0075 seconds)
+2025-04-19 21:59:30,664 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 21:59:30,717 - INFO - Response status: 200 (Processed in 0.0526 seconds)
+2025-04-19 21:59:30,736 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 21:59:30,747 - INFO - Response status: 200 (Processed in 0.0106 seconds)
+2025-04-19 21:59:30,756 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 21:59:30,772 - INFO - Response status: 200 (Processed in 0.0166 seconds)
+2025-04-19 21:59:30,789 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 21:59:30,798 - INFO - Response status: 200 (Processed in 0.0081 seconds)
+2025-04-19 22:03:48,085 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 22:03:48,098 - INFO - Response status: 200 (Processed in 0.0132 seconds)
+2025-04-19 22:03:48,110 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 22:03:48,116 - INFO - Response status: 200 (Processed in 0.0061 seconds)
+2025-04-19 22:03:48,125 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 22:03:48,133 - INFO - Response status: 200 (Processed in 0.0089 seconds)
+2025-04-19 22:03:48,144 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 22:03:48,148 - INFO - Response status: 200 (Processed in 0.0040 seconds)
+2025-04-19 23:09:45,665 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:09:45,681 - INFO - Response status: 200 (Processed in 0.0158 seconds)
+2025-04-19 23:09:45,687 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:09:45,695 - INFO - Response status: 200 (Processed in 0.0074 seconds)
+2025-04-19 23:10:31,518 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:10:31,524 - INFO - Response status: 200 (Processed in 0.0055 seconds)
+2025-04-19 23:10:31,540 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:10:31,676 - INFO - Response status: 200 (Processed in 0.1359 seconds)
+2025-04-19 23:10:31,693 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:10:31,702 - INFO - Response status: 200 (Processed in 0.0093 seconds)
+2025-04-19 23:10:31,709 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:10:31,714 - INFO - Response status: 200 (Processed in 0.0050 seconds)
+2025-04-19 23:12:07,516 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:12:07,524 - INFO - Response status: 200 (Processed in 0.0081 seconds)
+2025-04-19 23:12:07,530 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:12:07,537 - INFO - Response status: 200 (Processed in 0.0062 seconds)
+2025-04-19 23:12:07,538 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:12:07,547 - INFO - Response status: 200 (Processed in 0.0089 seconds)
+2025-04-19 23:12:07,553 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:12:07,557 - INFO - Response status: 200 (Processed in 0.0039 seconds)
+2025-04-19 23:12:25,358 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:12:25,372 - INFO - Response status: 200 (Processed in 0.0139 seconds)
+2025-04-19 23:12:25,383 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:12:25,395 - INFO - Response status: 200 (Processed in 0.0120 seconds)
+2025-04-19 23:12:25,402 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:12:25,408 - INFO - Response status: 200 (Processed in 0.0063 seconds)
+2025-04-19 23:12:25,412 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:12:25,420 - INFO - Response status: 200 (Processed in 0.0076 seconds)
+2025-04-19 23:14:36,465 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:14:36,469 - INFO - Response status: 200 (Processed in 0.0030 seconds)
+2025-04-19 23:14:36,477 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:14:36,488 - INFO - Response status: 200 (Processed in 0.0105 seconds)
+2025-04-19 23:14:36,492 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:14:36,492 - INFO - Response status: 200 (Processed in 0.0000 seconds)
+2025-04-19 23:14:36,492 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:14:36,510 - INFO - Response status: 200 (Processed in 0.0175 seconds)
+2025-04-19 23:20:04,248 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:20:04,254 - INFO - Response status: 200 (Processed in 0.0065 seconds)
+2025-04-19 23:20:04,265 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:20:04,274 - INFO - Response status: 200 (Processed in 0.0085 seconds)
+2025-04-19 23:20:04,282 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:20:04,286 - INFO - Response status: 200 (Processed in 0.0040 seconds)
+2025-04-19 23:20:04,292 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-19 23:20:04,298 - INFO - Response status: 200 (Processed in 0.0059 seconds)
+2025-04-20 00:01:56,910 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies
+2025-04-20 00:01:56,917 - INFO - Response status: 200 (Processed in 0.0071 seconds)
+2025-04-20 00:03:44,682 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies/
+2025-04-20 00:03:44,683 - INFO - Response status: 307 (Processed in 0.0010 seconds)
+2025-04-20 00:03:44,687 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies
+2025-04-20 00:03:44,689 - INFO - Response status: 200 (Processed in 0.0020 seconds)
+2025-04-20 00:11:12,927 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategies
+2025-04-20 00:11:12,928 - INFO - Response status: 404 (Processed in 0.0010 seconds)
+2025-04-20 00:11:37,675 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy
+2025-04-20 00:11:37,675 - INFO - Response status: 404 (Processed in 0.0000 seconds)
+2025-04-20 00:13:40,091 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy
+2025-04-20 00:13:40,091 - INFO - Response status: 404 (Processed in 0.0000 seconds)
+2025-04-20 00:14:59,789 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy
+2025-04-20 00:14:59,789 - INFO - Response status: 404 (Processed in 0.0000 seconds)
+2025-04-20 00:17:57,461 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy
+2025-04-20 00:17:57,461 - INFO - Response status: 404 (Processed in 0.0000 seconds)
+2025-04-20 00:18:09,700 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy/
+2025-04-20 00:18:09,701 - INFO - Response status: 307 (Processed in 0.0010 seconds)
+2025-04-20 00:18:09,704 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy
+2025-04-20 00:18:09,714 - INFO - Response status: 200 (Processed in 0.0095 seconds)
+2025-04-20 00:21:43,071 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy/
+2025-04-20 00:21:43,071 - INFO - Response status: 307 (Processed in 0.0000 seconds)
+2025-04-20 00:21:43,076 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy
+2025-04-20 00:21:43,077 - INFO - Response status: 422 (Processed in 0.0010 seconds)
+2025-04-20 00:21:50,145 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy/
+2025-04-20 00:21:50,145 - INFO - Response status: 307 (Processed in 0.0000 seconds)
+2025-04-20 00:21:50,148 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy
+2025-04-20 00:21:50,156 - INFO - Response status: 200 (Processed in 0.0073 seconds)
+2025-04-20 00:23:01,267 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy/
+2025-04-20 00:23:01,267 - INFO - Response status: 307 (Processed in 0.0000 seconds)
+2025-04-20 00:23:01,274 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy
+2025-04-20 00:23:01,281 - INFO - Response status: 200 (Processed in 0.0069 seconds)
+2025-04-20 00:45:26,700 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 00:45:26,930 - INFO - Response status: 200 (Processed in 0.2291 seconds)
+2025-04-20 00:45:26,938 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 00:45:26,944 - INFO - Response status: 200 (Processed in 0.0065 seconds)
+2025-04-20 00:45:26,952 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 00:45:26,957 - INFO - Response status: 200 (Processed in 0.0050 seconds)
+2025-04-20 00:45:26,970 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 00:45:26,975 - INFO - Response status: 200 (Processed in 0.0040 seconds)
+2025-04-20 00:45:34,890 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies/
+2025-04-20 00:45:34,890 - INFO - Response status: 307 (Processed in 0.0005 seconds)
+2025-04-20 00:45:34,893 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies/
+2025-04-20 00:45:34,894 - INFO - Response status: 307 (Processed in 0.0010 seconds)
+2025-04-20 00:45:34,896 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies
+2025-04-20 00:45:34,899 - INFO - Response status: 200 (Processed in 0.0020 seconds)
+2025-04-20 00:45:34,909 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies
+2025-04-20 00:45:34,913 - INFO - Response status: 200 (Processed in 0.0031 seconds)
+2025-04-20 00:45:44,909 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy/
+2025-04-20 00:45:44,909 - INFO - Response status: 307 (Processed in 0.0000 seconds)
+2025-04-20 00:45:44,922 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy
+2025-04-20 00:45:44,924 - INFO - Response status: 200 (Processed in 0.0020 seconds)
+2025-04-20 00:55:04,593 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 00:55:04,597 - INFO - Response status: 200 (Processed in 0.0040 seconds)
+2025-04-20 00:55:04,612 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 00:55:04,616 - INFO - Response status: 200 (Processed in 0.0040 seconds)
+2025-04-20 00:55:04,624 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 00:55:04,628 - INFO - Response status: 200 (Processed in 0.0040 seconds)
+2025-04-20 00:55:04,633 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 00:55:04,638 - INFO - Response status: 200 (Processed in 0.0050 seconds)
+2025-04-20 00:55:11,205 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies/
+2025-04-20 00:55:11,205 - INFO - Response status: 307 (Processed in 0.0000 seconds)
+2025-04-20 00:55:11,210 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies/
+2025-04-20 00:55:11,211 - INFO - Response status: 307 (Processed in 0.0010 seconds)
+2025-04-20 00:55:11,213 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies
+2025-04-20 00:55:11,216 - INFO - Response status: 200 (Processed in 0.0030 seconds)
+2025-04-20 00:55:11,223 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies
+2025-04-20 00:55:11,226 - INFO - Response status: 200 (Processed in 0.0030 seconds)
+2025-04-20 01:05:40,419 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 01:05:40,430 - INFO - Response status: 200 (Processed in 0.0100 seconds)
+2025-04-20 01:05:40,471 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 01:05:40,481 - INFO - Response status: 200 (Processed in 0.0090 seconds)
+2025-04-20 01:05:40,500 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 01:05:40,507 - INFO - Response status: 200 (Processed in 0.0055 seconds)
+2025-04-20 01:05:40,527 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 01:05:40,537 - INFO - Response status: 200 (Processed in 0.0100 seconds)
+2025-04-20 01:05:45,908 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies/
+2025-04-20 01:05:45,909 - INFO - Response status: 307 (Processed in 0.0010 seconds)
+2025-04-20 01:05:45,913 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies/
+2025-04-20 01:05:45,914 - INFO - Response status: 307 (Processed in 0.0010 seconds)
+2025-04-20 01:05:45,917 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies
+2025-04-20 01:05:45,921 - INFO - Response status: 200 (Processed in 0.0030 seconds)
+2025-04-20 01:05:45,931 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies
+2025-04-20 01:05:45,933 - INFO - Response status: 200 (Processed in 0.0020 seconds)
+2025-04-20 01:05:51,796 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy/
+2025-04-20 01:05:51,796 - INFO - Response status: 307 (Processed in 0.0000 seconds)
+2025-04-20 01:05:51,809 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy
+2025-04-20 01:05:51,811 - INFO - Response status: 200 (Processed in 0.0025 seconds)
+2025-04-20 01:12:12,530 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy/
+2025-04-20 01:12:12,531 - INFO - Response status: 307 (Processed in 0.0005 seconds)
+2025-04-20 01:12:12,536 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy
+2025-04-20 01:12:12,540 - INFO - Response status: 200 (Processed in 0.0040 seconds)
+2025-04-20 01:12:17,543 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy/
+2025-04-20 01:12:17,544 - INFO - Response status: 307 (Processed in 0.0000 seconds)
+2025-04-20 01:12:17,552 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy
+2025-04-20 01:12:17,556 - INFO - Response status: 200 (Processed in 0.0040 seconds)
+2025-04-20 01:14:18,957 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy/
+2025-04-20 01:14:18,957 - INFO - Response status: 307 (Processed in 0.0000 seconds)
+2025-04-20 01:14:18,961 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy
+2025-04-20 01:14:18,964 - INFO - Response status: 200 (Processed in 0.0020 seconds)
+2025-04-20 01:14:30,231 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy/
+2025-04-20 01:14:30,232 - INFO - Response status: 307 (Processed in 0.0010 seconds)
+2025-04-20 01:14:30,236 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy
+2025-04-20 01:14:30,238 - INFO - Response status: 200 (Processed in 0.0018 seconds)
+2025-04-20 01:57:21,186 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies/
+2025-04-20 01:57:21,187 - INFO - Response status: 307 (Processed in 0.0000 seconds)
+2025-04-20 01:57:21,192 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies
+2025-04-20 01:57:21,223 - INFO - Response status: 500 (Processed in 0.0313 seconds)
+2025-04-20 01:57:55,957 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies/
+2025-04-20 01:57:55,957 - INFO - Response status: 307 (Processed in 0.0000 seconds)
+2025-04-20 01:57:55,968 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies
+2025-04-20 01:57:55,993 - INFO - Response status: 200 (Processed in 0.0250 seconds)
+2025-04-20 02:27:28,582 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy/
+2025-04-20 02:27:28,582 - INFO - Response status: 307 (Processed in 0.0000 seconds)
+2025-04-20 02:27:28,582 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy
+2025-04-20 02:28:25,015 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy/
+2025-04-20 02:28:25,016 - INFO - Response status: 307 (Processed in 0.0000 seconds)
+2025-04-20 02:28:25,021 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy
+2025-04-20 02:28:33,800 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy/
+2025-04-20 02:28:33,800 - INFO - Response status: 307 (Processed in 0.0000 seconds)
+2025-04-20 02:28:33,804 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy
+2025-04-20 02:28:33,811 - INFO - Response status: 500 (Processed in 0.0070 seconds)
+2025-04-20 02:29:15,765 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 02:29:15,798 - INFO - Response status: 500 (Processed in 0.0320 seconds)
+2025-04-20 02:29:18,544 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 02:29:18,559 - INFO - Response status: 500 (Processed in 0.0140 seconds)
+2025-04-20 02:29:55,124 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 02:29:55,142 - INFO - Response status: 500 (Processed in 0.0173 seconds)
+2025-04-20 02:29:55,149 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 02:29:55,151 - INFO - Response status: 500 (Processed in 0.0020 seconds)
+2025-04-20 02:31:40,180 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 02:31:40,210 - INFO - Response status: 500 (Processed in 0.0305 seconds)
+2025-04-20 02:31:40,216 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 02:31:40,220 - INFO - Response status: 500 (Processed in 0.0022 seconds)
+2025-04-20 02:32:29,229 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 02:32:29,262 - INFO - Response status: 500 (Processed in 0.0331 seconds)
+2025-04-20 02:32:29,269 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 02:32:29,272 - INFO - Response status: 500 (Processed in 0.0025 seconds)
+2025-04-20 02:35:33,715 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 02:35:33,748 - INFO - Response status: 500 (Processed in 0.0331 seconds)
+2025-04-20 02:35:33,755 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 02:35:33,758 - INFO - Response status: 500 (Processed in 0.0020 seconds)
+2025-04-20 02:38:01,655 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 02:38:01,850 - INFO - Response status: 200 (Processed in 0.1937 seconds)
+2025-04-20 02:38:01,856 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 02:38:01,861 - INFO - Response status: 200 (Processed in 0.0050 seconds)
+2025-04-20 02:38:01,868 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 02:38:01,872 - INFO - Response status: 200 (Processed in 0.0039 seconds)
+2025-04-20 02:38:01,881 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/stock/tocken
+2025-04-20 02:38:01,885 - INFO - Response status: 200 (Processed in 0.0040 seconds)
+2025-04-20 02:38:14,384 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies/
+2025-04-20 02:38:14,384 - INFO - Response status: 307 (Processed in 0.0006 seconds)
+2025-04-20 02:38:14,389 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies/
+2025-04-20 02:38:14,390 - INFO - Response status: 307 (Processed in 0.0005 seconds)
+2025-04-20 02:38:14,392 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies
+2025-04-20 02:38:14,408 - INFO - Response status: 200 (Processed in 0.0156 seconds)
+2025-04-20 02:38:14,415 - INFO - Incoming request: GET http://127.0.0.1:8000/common/get/strategies
+2025-04-20 02:38:14,431 - INFO - Response status: 200 (Processed in 0.0160 seconds)
+2025-04-20 02:38:20,806 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy/
+2025-04-20 02:38:20,806 - INFO - Response status: 307 (Processed in 0.0000 seconds)
+2025-04-20 02:38:20,819 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy
+2025-04-20 02:38:20,823 - INFO - Response status: 500 (Processed in 0.0030 seconds)
+2025-04-20 02:39:51,491 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy/
+2025-04-20 02:39:51,491 - INFO - Response status: 307 (Processed in 0.0000 seconds)
+2025-04-20 02:39:51,495 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy
+2025-04-20 02:39:51,513 - INFO - Response status: 500 (Processed in 0.0163 seconds)
+2025-04-20 02:45:27,238 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy/
+2025-04-20 02:45:27,239 - INFO - Response status: 307 (Processed in 0.0010 seconds)
+2025-04-20 02:45:27,244 - INFO - Incoming request: POST http://127.0.0.1:8000/common/post/add/strategy
+2025-04-20 02:45:27,305 - INFO - Response status: 200 (Processed in 0.0614 seconds)

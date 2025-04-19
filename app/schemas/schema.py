@@ -27,3 +27,11 @@ class CommonResponse(BaseModel):
     status:int
     data: Union[List[Any], Any]
     msg:str
+
+
+class AddStrategyRequest(BaseModel):
+    strategy_name: str
+    strategy_uuid: str
+    stock_name: str
+    stock_token: str
+    quantity:int

@@ -19,6 +19,8 @@ POSTGRES_DATABASE_URL = (
     f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
 )
 
+print(f"Connecting to PostgreSQL database at {POSTGRES_DATABASE_URL}")
+
 engine = create_engine(POSTGRES_DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
