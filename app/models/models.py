@@ -48,11 +48,12 @@ class UserActiveStrategy(Base):
     user_id = Column(Integer, ForeignKey('user.id'))
     strategy_id = Column(String, ForeignKey('strategy.uuid'))
     stock_token = Column(String, ForeignKey('stock_details.token'), nullable=False)
-
+    trade_count = Column(Integer, nullable=False)
     quantity = Column(Integer, nullable=False)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
     is_active = Column(Boolean, nullable=False, default=True)
+    is_started = Column(Boolean, nullable=False, default=False)
     deactivated_at = Column(DateTime, nullable=True, default=None)
     deactivated_by = Column(Integer, nullable=True, default=None)
 
@@ -60,3 +61,42 @@ class UserActiveStrategy(Base):
     user = relationship("User", back_populates="active_strategies")
     strategy = relationship("Strategy", back_populates="active_strategies")
     stock_details = relationship("StockDetails", back_populates="active_strategies")
+    order_managers = relationship("OrderManager", back_populates="user_active_strategy")
+
+
+class OrderManager(Base):
+    __tablename__ = 'order_manager'
+    id = Column(Integer, primary_key=True, index=True)
+    order_id = Column(String, unique=True, nullable=False)
+    completed_order_count = Column(Integer, nullable=False, default=0)
+    buy_count = Column(Integer, nullable=False, default=0)
+    sell_count = Column(Integer, nullable=False, default=0)
+    is_active = Column(Boolean, nullable=False, default=True)
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    # New foreign key
+    user_active_strategy_id = Column(Integer, ForeignKey('user_active_strategy.id'), nullable=False)
+
+    # Relationships
+    user_active_strategy = relationship("UserActiveStrategy", back_populates="order_managers")
+
+
+class TradeHistory(Base):
+    __tablename__ = 'trade_history'
+    id = Column(Integer, primary_key=True, index=True)
+    order_id = Column(String, ForeignKey('order_manager.order_id'))
+    stock_token = Column(String, ForeignKey('stock_details.token'))
+    trade_type = Column(String, nullable=False)  # 'buy' or 'sell'
+    quantity = Column(Integer, nullable=False)
+    price = Column(Float, nullable=False)
+    total_price = Column(Float, nullable=False)
+    trade_entry_time = Column(DateTime, nullable=False, default=datetime.utcnow)
+    trade_exit_time = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+
+    order_manager = relationship("OrderManager")
+    stock_details = relationship("StockDetails")
+
+
+

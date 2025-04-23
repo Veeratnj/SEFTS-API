@@ -73,7 +73,9 @@ def add_strategy_service(db, strategy_request):
             user_id=1,  # default user
             strategy_id=strategy_request.strategy_uuid,  # FK to Strategy.uuid
             stock_token=strategy_request.stock_token,    # FK to StockDetails.token
-            quantity=strategy_request.quantity           # user-defined quantity
+            quantity=strategy_request.quantity,           # user-defined quantity
+            trade_count=strategy_request.trade_count,    # user-defined trade count
+            is_started=False,  # default value
         )
         db.add(user_active_strategy)
         db.commit()

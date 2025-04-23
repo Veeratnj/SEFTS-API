@@ -35,3 +35,4 @@ class AddStrategyRequest(BaseModel):
     stock_name: str
     stock_token: str
     quantity:int
+    trade_count:int
