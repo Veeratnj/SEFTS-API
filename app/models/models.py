@@ -20,7 +20,7 @@ class StockDetails(Base):
     id = Column(Integer, primary_key=True, index=True)
     stock_name = Column(String, nullable=False)
     token = Column(String, unique=True, nullable=False)
-    ltp = Column(Integer, nullable=False)
+    ltp = Column(Float, nullable=False)
     last_update = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     # Corrected: This establishes the reverse relationship with UserActiveStrategy
