@@ -39,3 +39,5 @@ smartapi-python
 pandas
 uvicorn[standard]
 psycopg2-binary
+jwt
+PyJWT

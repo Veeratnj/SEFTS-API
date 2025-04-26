@@ -1,7 +1,7 @@
 from app.middleware.middleware import TimerMiddleware
 from fastapi import FastAPI
 from app.models import models
-from app.controllers import common,websocket
+from app.controllers import common, portfolios,websocket,loginAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.db.db import engine
 
@@ -32,6 +32,9 @@ def create_app():
     models.Base.metadata.create_all(bind=engine)
     app.include_router(common.router, prefix="/common")
     app.include_router(websocket.router, prefix="/websocket")
+    app.include_router(loginAPI.router, prefix="/login")
+    app.include_router(portfolios.router, prefix="/portfolios")
+
     return app
 
 
