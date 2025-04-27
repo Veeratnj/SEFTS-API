@@ -70,7 +70,7 @@ def add_strategy_service(db, strategy_request):
     try:
         # Insert into UserActiveStrategy only
         user_active_strategy = UserActiveStrategy(
-            user_id=1,  # default user
+            user_id=strategy_request.user_id,  # default user
             strategy_id=strategy_request.strategy_uuid,  # FK to Strategy.uuid
             stock_token=strategy_request.stock_token,    # FK to StockDetails.token
             quantity=strategy_request.quantity,           # user-defined quantity

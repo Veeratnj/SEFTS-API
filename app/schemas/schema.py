@@ -36,3 +36,4 @@ class AddStrategyRequest(BaseModel):
     stock_token: str
     quantity:int
     trade_count:int
+    user_id=int
