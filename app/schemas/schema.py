@@ -37,3 +37,22 @@ class AddStrategyRequest(BaseModel):
     quantity:int
     trade_count:int
     user_id:int
+
+
+
+class TradeHistoryResponse(BaseModel):
+    id: int
+    stock_name: str
+    order_id: str
+    stock_token: str
+    trade_type: str
+    quantity: int
+    price: float
+    entry_ltp: float
+    exit_ltp: float
+    total_price: float
+    trade_entry_time: datetime
+    trade_exit_time: datetime
+
+    class Config:
+        orm_mode = True

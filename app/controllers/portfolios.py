@@ -1,4 +1,6 @@
-from app.schemas.schema import CommonResponse
+from typing import List
+from app.models.models import EquityTradeHistory, OrderManager, StockDetails, UserActiveStrategy
+from app.schemas.schema import CommonResponse, TradeHistoryResponse
 from fastapi import APIRouter, HTTPException ,Depends
 from pydantic import BaseModel
 from app.services.login_services import authenticate_user
@@ -83,4 +85,53 @@ def get_all_open_orders(user_id: int,db: Session = Depends(get_db)):
             data={},
             msg="Failed to fetch rejected orders"
         )
+
+
+@router.get("/trade-history/{user_id}", response_model=List[TradeHistoryResponse])
+def get_trade_history(user_id: int, db: Session = Depends(get_db)):
+    # Get all UserActiveStrategy IDs for the user
+    user_strategies = db.query(UserActiveStrategy).filter(UserActiveStrategy.user_id == user_id).all()
+
+    if not user_strategies:
+        raise HTTPException(status_code=404, detail="User not found or has no active strategies")
+
+    strategy_ids = [strategy.id for strategy in user_strategies]
+
+    # Get all OrderManagers related to these strategies
+    orders = db.query(OrderManager).filter(OrderManager.user_active_strategy_id.in_(strategy_ids)).all()
+    order_ids = [order.order_id for order in orders]
+
+    # Join EquityTradeHistory with StockDetails to fetch stock_name
+    trades = (
+        db.query(
+            EquityTradeHistory,
+            StockDetails.stock_name
+        )
+        .join(StockDetails, EquityTradeHistory.stock_token == StockDetails.token)
+        .filter(EquityTradeHistory.order_id.in_(order_ids))
+        .all()
+    )
+
+    # Format the response using the schema
+    trade_responses = [
+        TradeHistoryResponse(
+            id=trade.id,
+            stock_name=stock_name,
+            order_id=trade.order_id,
+            stock_token=trade.stock_token,
+            trade_type=trade.trade_type,
+            quantity=trade.quantity,
+            price=trade.price,
+            entry_ltp=trade.entry_ltp,
+            exit_ltp=trade.exit_ltp,
+            total_price=trade.total_price,
+            trade_entry_time=trade.trade_entry_time,
+            trade_exit_time=trade.trade_exit_time
+        )
+        for trade, stock_name in trades
+    ]
+
+    return trade_responses
+
+
 

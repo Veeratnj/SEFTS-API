@@ -8,7 +8,7 @@ from app.db.db import engine
 
 app = FastAPI(debug=True)
 
-@app.route("/")
+@app.get("/")
 def hc():
     return {
     "APP": "",
