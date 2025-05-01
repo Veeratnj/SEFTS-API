@@ -145,11 +145,11 @@ def get_trade_history(user_id: int, db: Session = Depends(get_db)):
 
 
 @router.get("/get/piechart/data")
-def get_piechart_data(user_id: int,db: Session = Depends(get_db)):
+def get_piechart_data(user_id: int,filter:str,db: Session = Depends(get_db)):
     
     
     try:
-        result=get_piechart_data_services(user_id=user_id,db=db,)
+        result=get_piechart_data_services(user_id=user_id,db=db,filter=filter)
         return CommonResponse(
                 status=200,
                 data=result,
@@ -184,9 +184,9 @@ def get_bar_chart_data(user_id: int,filter:str,db: Session = Depends(get_db)):
 
 
 @router.get("/get/speedometer/details")
-def get_speedometer_data(user_id: int,db: Session = Depends(get_db)):
+def get_speedometer_data(user_id: int,filter:str,db: Session = Depends(get_db)):
     try:
-        result=get_speedometer_data_service(user_id=user_id,db=db,)
+        result=get_speedometer_data_service(user_id=user_id,db=db,filter=filter)
         return CommonResponse(
                 status=200,
                 data=result,

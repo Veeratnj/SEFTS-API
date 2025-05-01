@@ -4,9 +4,8 @@
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
-
 from sqlalchemy import case
-
+from sqlalchemy import func
 from sqlalchemy.orm import joinedload
 from app.models.models import EquityTradeHistory, OrderManager, StockDetails, User, UserActiveStrategy
 
@@ -107,11 +106,24 @@ def get_orders_services(user_id: int, order_type: str, db):
     return result
 
 
-from sqlalchemy import func
-from sqlalchemy.orm import Session
 
-def get_piechart_data_services(user_id: int, db: Session):
+
+def get_piechart_data_services1(user_id: int,filter:str, db: Session):
     # Fetch raw data from the database
+    now = datetime.utcnow()
+    if filter == "1d":
+        start_time = now - timedelta(days=1)
+    elif filter == "1w":
+        start_time = now - timedelta(weeks=1)
+    elif filter == "1m":
+        start_time = now - timedelta(days=30)
+    elif filter == "1y":
+        start_time = now - timedelta(days=365)
+    else:
+        # Default to all-time if no valid filter is provided
+        start_time = None
+
+
     raw_data = db.query(
         EquityTradeHistory.total_price,
         EquityTradeHistory.price
@@ -122,6 +134,9 @@ def get_piechart_data_services(user_id: int, db: Session):
     ).filter(
         UserActiveStrategy.user_id == user_id
     ).all()
+
+    # query = query.filter(EquityTradeHistory.trade_entry_time >= start_time)
+
 
     # Initialize variables for calculations
     total_profit = 0
@@ -149,7 +164,64 @@ def get_piechart_data_services(user_id: int, db: Session):
     }
 
 
+def get_piechart_data_services(user_id: int, filter: str, db: Session):
+    # Fetch raw data from the database
+    now = datetime.utcnow()
+    if filter == "1d":
+        start_time = now - timedelta(days=1)
+    elif filter == "1w":
+        start_time = now - timedelta(weeks=1)
+    elif filter == "1m":
+        start_time = now - timedelta(days=30)
+    elif filter == "1y":
+        start_time = now - timedelta(days=365)
+    else:
+        # Default to all-time if no valid filter is provided
+        start_time = None
 
+    # Build the query
+    raw_data_query = db.query(
+        EquityTradeHistory.total_price,
+        EquityTradeHistory.price
+    ).join(
+        OrderManager, EquityTradeHistory.order_id == OrderManager.order_id
+    ).join(
+        UserActiveStrategy, OrderManager.user_active_strategy_id == UserActiveStrategy.id
+    ).filter(
+        UserActiveStrategy.user_id == user_id
+    )
+
+    # Apply the time filter if a valid start_time is determined
+    if start_time:
+        raw_data_query = raw_data_query.filter(EquityTradeHistory.trade_entry_time >= start_time)
+
+    # Execute the query and fetch results
+    raw_data = raw_data_query.all()
+
+    # Initialize variables for calculations
+    total_profit = 0
+    total_investment = 0
+
+    # Perform calculations in Python
+    for record in raw_data:
+        total_profit += record.total_price - record.price
+        total_investment += record.price
+
+    # Avoid division by zero
+    if total_investment > 0:
+        profit_percentage = round((total_profit * 100.0) / total_investment, 2)
+        investment_percentage = round(100.0 - profit_percentage, 2)
+    else:
+        profit_percentage = 0
+        investment_percentage = 0
+
+    # Return the calculated data
+    return {
+        'profit': round(total_profit, 2),
+        'total_investment': round(total_investment, 2),
+        'profit_percentage': profit_percentage,
+        'investment_percentage': investment_percentage
+    }
 
 
 
@@ -213,7 +285,20 @@ def get_barchart_data_services(user_id: int, filter: str, db: Session):
 
 
 
-def get_speedometer_data_service(user_id: int, db: Session):
+def get_speedometer_data_service1(user_id: int,filter:str, db: Session):
+    now = datetime.utcnow()
+    if filter == "1d":
+        start_time = now - timedelta(days=1)
+    elif filter == "1w":
+        start_time = now - timedelta(weeks=1)
+    elif filter == "1m":
+        start_time = now - timedelta(days=30)
+    elif filter == "1y":
+        start_time = now - timedelta(days=365)
+    else:
+        # Default to all-time if no valid filter is provided
+        start_time = None
+
     # Fetch total investment and total returns
     data = db.query(
         func.sum(EquityTradeHistory.price).label('total_investment'),
@@ -233,4 +318,41 @@ def get_speedometer_data_service(user_id: int, db: Session):
     }
 
 
+def get_speedometer_data_service(user_id: int, filter: str, db: Session):
+    now = datetime.utcnow()
+    if filter == "1d":
+        start_time = now - timedelta(days=1)
+    elif filter == "1w":
+        start_time = now - timedelta(weeks=1)
+    elif filter == "1m":
+        start_time = now - timedelta(days=30)
+    elif filter == "1y":
+        start_time = now - timedelta(days=365)
+    else:
+        # Default to all-time if no valid filter is provided
+        start_time = None
 
+    # Build the query
+    query = db.query(
+        func.sum(EquityTradeHistory.price).label('total_investment'),
+        func.sum(EquityTradeHistory.total_price).label('total_returns')
+    ).join(
+        OrderManager, EquityTradeHistory.order_id == OrderManager.order_id
+    ).join(
+        UserActiveStrategy, OrderManager.user_active_strategy_id == UserActiveStrategy.id
+    ).filter(
+        UserActiveStrategy.user_id == user_id
+    )
+
+    # Apply the time filter if a valid start_time is determined
+    if start_time:
+        query = query.filter(EquityTradeHistory.trade_entry_time >= start_time)
+
+    # Execute the query
+    data = query.first()
+
+    # Prepare the result
+    return {
+        "overallInvestment": round(data.total_investment, 2) if data.total_investment else 0,
+        "overallReturns": round(data.total_returns, 2) if data.total_returns else 0
+    }
