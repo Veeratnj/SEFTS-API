@@ -53,6 +53,7 @@ class TradeHistoryResponse(BaseModel):
     total_price: float
     trade_entry_time: datetime
     trade_exit_time: datetime
+    pnl: float
 
     class Config:
         orm_mode = True

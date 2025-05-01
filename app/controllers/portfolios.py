@@ -8,7 +8,10 @@ from app.cryptography.crypt import decrypt
 from sqlalchemy.orm import Session
 from app.db.db import get_db
 from app.services.dashboard_services import (
+    get_barchart_data_services,
     get_orders_services,
+    get_piechart_data_services,
+    get_speedometer_data_service,
 )
 
 
@@ -114,24 +117,85 @@ def get_trade_history(user_id: int, db: Session = Depends(get_db)):
 
     # Format the response using the schema
     trade_responses = [
-        TradeHistoryResponse(
-            id=trade.id,
-            stock_name=stock_name,
-            order_id=trade.order_id,
-            stock_token=trade.stock_token,
-            trade_type=trade.trade_type,
-            quantity=trade.quantity,
-            price=trade.price,
-            entry_ltp=trade.entry_ltp,
-            exit_ltp=trade.exit_ltp,
-            total_price=trade.total_price,
-            trade_entry_time=trade.trade_entry_time,
-            trade_exit_time=trade.trade_exit_time
-        )
-        for trade, stock_name in trades
-    ]
+    TradeHistoryResponse(
+        id=trade.id,
+        stock_name=stock_name,
+        order_id=trade.order_id,
+        stock_token=trade.stock_token,
+        trade_type=trade.trade_type,
+        quantity=trade.quantity,
+        price=trade.price,
+        entry_ltp=trade.entry_ltp,
+        exit_ltp=trade.exit_ltp,
+        total_price=trade.total_price,
+        trade_entry_time=trade.trade_entry_time,
+        trade_exit_time=trade.trade_exit_time,
+        pnl=round(
+            trade.price - trade.total_price if trade.trade_type == 'sell'
+            else trade.total_price - trade.price,
+            2
+        ),
+    )
+    for trade, stock_name in trades
+]
 
     return trade_responses
 
 
 
+
+@router.get("/get/piechart/data")
+def get_piechart_data(user_id: int,db: Session = Depends(get_db)):
+    
+    
+    try:
+        result=get_piechart_data_services(user_id=user_id,db=db,)
+        return CommonResponse(
+                status=200,
+                data=result,
+                msg="piechart data fetched successfully"
+            )
+    except Exception as e:  
+        print("Error during fetching active orders:", str(e))
+        return CommonResponse(
+            status=500,
+            data={'error': str(e)},
+            msg="Failed to fetch piechart data"
+        )
+
+
+
+@router.get("/get/barchart/details")
+def get_bar_chart_data(user_id: int,filter:str,db: Session = Depends(get_db)):
+    try:
+        result=get_barchart_data_services(user_id=user_id,db=db,filter=filter)
+        return CommonResponse(
+                status=200,
+                data=result,
+                msg="bar chart data fetched successfully"
+            )
+    except Exception as e:  
+        print("Error during fetching active orders:", str(e))
+        return CommonResponse(
+            status=500,
+            data={'error': str(e)},
+            msg="Failed to fetch bar chart data"
+        )
+
+
+@router.get("/get/speedometer/details")
+def get_speedometer_data(user_id: int,db: Session = Depends(get_db)):
+    try:
+        result=get_speedometer_data_service(user_id=user_id,db=db,)
+        return CommonResponse(
+                status=200,
+                data=result,
+                msg="speedometer data fetched successfully"
+            )
+    except Exception as e:  
+        print("Error during fetching active orders:", str(e))
+        return CommonResponse(
+            status=500,
+            data={'error': str(e)},
+            msg="Failed to fetch speedometer data"
+        )
