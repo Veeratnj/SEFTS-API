@@ -164,7 +164,7 @@ def get_piechart_data_services1(user_id: int,filter:str, db: Session):
     }
 
 
-def get_piechart_data_services(user_id: int, filter: str, db: Session):
+def get_piechart_data_services2(user_id: int, filter: str, db: Session):
     # Fetch raw data from the database
     now = datetime.utcnow()
     if filter == "1d":
@@ -201,7 +201,7 @@ def get_piechart_data_services(user_id: int, filter: str, db: Session):
     # Initialize variables for calculations
     total_profit = 0
     total_investment = 0
-
+    print(raw_data)
     # Perform calculations in Python
     for record in raw_data:
         total_profit += record.total_price - record.price
@@ -223,7 +223,85 @@ def get_piechart_data_services(user_id: int, filter: str, db: Session):
         'investment_percentage': investment_percentage
     }
 
+def get_piechart_data_services(user_id: int, filter: str, db: Session):
+    now = datetime.utcnow()
 
+    # Determine filter range
+    if filter == "1d":
+        start_time = now - timedelta(days=1)
+    elif filter == "1w":
+        start_time = now - timedelta(weeks=1)
+    elif filter == "1m":
+        start_time = now - timedelta(days=30)
+    elif filter == "1y":
+        start_time = now - timedelta(days=365)
+    else:
+        start_time = None
+
+    # Build query
+    raw_data_query = db.query(
+        EquityTradeHistory.total_price,
+        EquityTradeHistory.price,
+        EquityTradeHistory.trade_type  # Assuming 'trade_type' exists, with values 'buy' or 'sell'
+    ).join(
+        OrderManager, EquityTradeHistory.order_id == OrderManager.order_id
+    ).join(
+        UserActiveStrategy, OrderManager.user_active_strategy_id == UserActiveStrategy.id
+    ).filter(
+        UserActiveStrategy.user_id == user_id
+    )
+
+    if start_time:
+        raw_data_query = raw_data_query.filter(EquityTradeHistory.trade_entry_time >= start_time)
+
+    raw_data = raw_data_query.all()
+
+    total_profit = 0
+    total_loss = 0
+    total_investment = 0
+
+    for record in raw_data:
+        # Calculate profit/loss based on trade type (buy or sell)
+        if record.trade_type == "buy":
+            diff = record.total_price - record.price
+        elif record.trade_type == "sell":
+            diff = record.price - record.total_price
+        else:
+            continue  # If there's any invalid trade type, skip it.
+
+        if diff > 0:
+            total_profit += diff
+        elif diff < 0:
+            total_loss += abs(diff)
+
+        total_investment += record.price
+
+    # Calculate percentages
+    total_profit_and_loss = total_profit + total_loss
+    if total_profit_and_loss > 0:
+        profit_percentage = round((total_profit * 100.0) / total_profit_and_loss, 2)
+        loss_percentage = round((total_loss * 100.0) / total_profit_and_loss, 2)
+    else:
+        profit_percentage = 0
+        loss_percentage = 0
+
+    # Calculate profit per lakh
+    if total_investment > 0:
+        profit_per_lakh = round((total_profit / total_investment) * 100000, 2)
+    else:
+        profit_per_lakh = 0
+
+    total_returns = total_profit - total_loss
+
+    return {
+        'profit': round(total_profit, 2),
+        'loss': round(total_loss, 2),
+        'total_investment': round(total_investment, 2),
+        'profit_percentage': profit_percentage,
+        'loss_percentage': loss_percentage,
+        'profit_per_lakh': profit_per_lakh,
+        'total_returns': round(total_returns + total_investment, 2)
+    }
 
 
 def get_barchart_data_services(user_id: int, filter: str, db: Session):
