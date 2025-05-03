@@ -27,6 +27,7 @@ def authenticate_user(email: str, password: str, db: Session) -> dict:
     token_data = {
         "user_id": user.id,
         "email": user.email,
+        "role":user.role,
         "exp": datetime.utcnow() + timedelta(hours=12)  # Token expires in 12 hour
     }
     token = jwt.encode(token_data, SECRET_KEY, algorithm=ALGORITHM)
@@ -47,5 +48,6 @@ def authenticate_user(email: str, password: str, db: Session) -> dict:
         'user_id': user.id,
         'email': user.email,
         'name': user.name,
+        "role":user.role,
         'token': token,
     }

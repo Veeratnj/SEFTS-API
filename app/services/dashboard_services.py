@@ -478,8 +478,10 @@ def get_speedometer_data_service1(user_id: int,filter:str, db: Session):
     }
 
 
-def get_speedometer_data_service(user_id: int, filter: str, db: Session):
+def get_speedometer_data_service2(user_id: int, filter: str, db: Session):
     now = datetime.utcnow()
+
+    # Determine the start_time based on the filter
     if filter == "1d":
         start_time = now - timedelta(days=1)
     elif filter == "1w":
@@ -492,10 +494,10 @@ def get_speedometer_data_service(user_id: int, filter: str, db: Session):
         # Default to all-time if no valid filter is provided
         start_time = None
 
-    # Build the query
+    # Build the query based on the filter
     query = db.query(
-        func.sum(EquityTradeHistory.price).label('total_investment'),
-        func.sum(EquityTradeHistory.total_price).label('total_returns')
+        EquityTradeHistory.price,
+        EquityTradeHistory.total_price
     ).join(
         OrderManager, EquityTradeHistory.order_id == OrderManager.order_id
     ).join(
@@ -508,11 +510,80 @@ def get_speedometer_data_service(user_id: int, filter: str, db: Session):
     if start_time:
         query = query.filter(EquityTradeHistory.trade_entry_time >= start_time)
 
-    # Execute the query
-    data = query.first()
+    # Execute the query to get the relevant data
+    data = query.all()
 
-    # Prepare the result
+    # Calculate total investment and total returns
+    total_investment = sum(record.price for record in data)
+    total_returns = sum(record.total_price for record in data)
+
+    # Return the result
     return {
-        "overallInvestment": round(data.total_investment, 2) if data.total_investment else 0,
-        "overallReturns": round(data.total_returns, 2) if data.total_returns else 0
+        "overallInvestment": round(total_investment, 2) if total_investment else 0,
+        "overallReturns": round(total_returns, 2) if total_returns else 0
+    }
+
+# from datetime import datetime, timedelta
+# from sqlalchemy import case, func
+
+
+def get_speedometer_data_service(user_id: int, filter: str, db: Session):
+    now = datetime.utcnow()
+
+    # Determine the start_time based on the filter
+    if filter == "1d":
+        start_time = now - timedelta(days=1)
+    elif filter == "1w":
+        start_time = now - timedelta(weeks=1)
+    elif filter == "1m":
+        start_time = now - timedelta(days=30)
+    elif filter == "6m":  # Example: 6 months filter
+        start_time = now - timedelta(days=180)
+    elif filter == "1y":
+        start_time = now - timedelta(days=365)
+    else:
+        # Default to all-time if no valid filter is provided
+        start_time = None
+
+    # Build the query
+    query = db.query(
+        func.sum(
+            case(
+                (EquityTradeHistory.trade_type == 'buy', 
+                 func.greatest(EquityTradeHistory.total_price - EquityTradeHistory.price, 0)),
+                (EquityTradeHistory.trade_type == 'sell', 
+                 func.greatest(EquityTradeHistory.price - EquityTradeHistory.total_price, 0)),
+                else_=0
+            )
+        ).label('total_profit'),
+        func.sum(
+            case(
+                (EquityTradeHistory.trade_type == 'buy', 
+                 func.greatest(EquityTradeHistory.price - EquityTradeHistory.total_price, 0)),
+                (EquityTradeHistory.trade_type == 'sell', 
+                 func.greatest(EquityTradeHistory.total_price - EquityTradeHistory.price, 0)),
+                else_=0
+            )
+        ).label('total_loss')
+    ).join(
+        OrderManager, EquityTradeHistory.order_id == OrderManager.order_id
+    ).join(
+        UserActiveStrategy, OrderManager.user_active_strategy_id == UserActiveStrategy.id
+    ).join(
+        StockDetails, StockDetails.token == EquityTradeHistory.stock_token
+    ).filter(
+        UserActiveStrategy.user_id == user_id
+    )
+
+    # Apply the time filter if a valid start_time is determined
+    if start_time:
+        query = query.filter(EquityTradeHistory.trade_entry_time >= start_time)
+
+    # Execute the query
+    result = query.first()
+
+    # Return the result as a dictionary
+    return {
+    "total_profit": round(result.total_profit, 2) if result.total_profit else 0,
+    "total_loss": round(result.total_loss, 2) if result.total_loss else 0
     }
