@@ -172,7 +172,7 @@ def get_orders_services(user_id: int, order_type: str, db):
 
         # Round off the gain_loss to 2 decimal places
         if gain_loss is not None:
-            gain_loss = round(gain_loss, 2)
+            gain_loss = round(gain_loss, 2)*quantity
 
         result.append({
             "key": idx + 1,

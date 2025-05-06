@@ -4,7 +4,7 @@ from app.models import models
 from app.controllers import common, portfolios,websocket,loginAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.db.db import engine
-
+from app.admin import setup_admin
 
 app = FastAPI(debug=True)
 
@@ -27,7 +27,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+setup_admin(app)
 def create_app():
     models.Base.metadata.create_all(bind=engine)
     app.include_router(common.router, prefix="/common")
