@@ -50,7 +50,9 @@ class Stocks(Base):
     id = Column(Integer, primary_key=True, index=True)
     stock_name = Column(String, nullable=False)
     token = Column(String, unique=True, nullable=False)
-    market_type = Column(String, nullable=False)
+    exchange = Column(String, nullable=False)
+    is_hotlist = Column(Boolean, nullable=False, default=False)
+    trend_type = Column(String, nullable=False)  # 'bullish' or 'bearish'
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
     created_by = Column(Integer, nullable=False, default=0)

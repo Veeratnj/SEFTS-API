@@ -1,6 +1,6 @@
 
 
-from app.models.models import StockDetails,Strategy, UserActiveStrategy
+from app.models.models import StockDetails,Strategy, UserActiveStrategy , Stocks
 
 
 # def user_add(db,user,):
@@ -33,16 +33,20 @@ from app.models.models import StockDetails,Strategy, UserActiveStrategy
 
 def get_all_stock_name_service(db):
     try:
-    
-        result=db.query(StockDetails.stock_name,StockDetails.token,StockDetails.ltp).all()
+        # result=db.query(StockDetails.stock_name,StockDetails.token,StockDetails.ltp,Stocks.trend_type).all()
+        result = (db.query(Stocks.token, Stocks.stock_name, StockDetails.ltp,Stocks.trend_type)
+        .join(StockDetails, StockDetails.token == Stocks.token)
+        .filter(Stocks.is_hotlist == True and Stocks.is_deleted == False)
+        .all())
         print(result)
         output_structured = []
 
-        for stock_name, token, ltp in result:
+        for token,stock_name, ltp ,trend_type in result:
             output_structured.append({
                 "name": stock_name,
                 "token": token,
                 "points": ltp,
+                "trend_type": trend_type
             })
 
         return output_structured
