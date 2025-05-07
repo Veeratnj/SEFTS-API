@@ -1,3 +1,4 @@
+import json
 from typing import List
 from app.models.models import EquityTradeHistory, OrderManager, StockDetails, UserActiveStrategy
 from app.schemas.schema import CommonResponse, TradeHistoryResponse
@@ -90,6 +91,60 @@ def get_all_open_orders(user_id: int,db: Session = Depends(get_db)):
         )
 
 
+# @router.get("/trade-history1/{user_id}", response_model=List[TradeHistoryResponse])
+# def get_trade_history1(user_id: int, db: Session = Depends(get_db)):
+#     # Get all UserActiveStrategy IDs for the user
+#     user_strategies = db.query(UserActiveStrategy).filter(UserActiveStrategy.user_id == user_id).all()
+
+#     if not user_strategies:
+#         raise HTTPException(status_code=404, detail="User not found or has no active strategies")
+
+#     strategy_ids = [strategy.id for strategy in user_strategies]
+
+#     # Get all OrderManagers related to these strategies
+#     orders = db.query(OrderManager).filter(OrderManager.user_active_strategy_id.in_(strategy_ids)).all()
+#     order_ids = [order.order_id for order in orders]
+
+#     # Join EquityTradeHistory with StockDetails to fetch stock_name
+#     trades = (
+#         db.query(
+#             EquityTradeHistory,
+#             StockDetails.stock_name
+#         )
+#         .join(StockDetails, EquityTradeHistory.stock_token == StockDetails.token)
+#         .filter(EquityTradeHistory.order_id.in_(order_ids))
+#         .all()
+#     )
+
+#     # Format the response using the schema
+#     trade_responses = [
+#     TradeHistoryResponse(
+#         id=trade.id,
+#         stock_name=stock_name,
+#         order_id=trade.order_id,
+#         stock_token=trade.stock_token,
+#         trade_type=trade.trade_type,
+#         quantity=trade.quantity,
+#         price=trade.price,
+#         entry_ltp=trade.entry_ltp,
+#         exit_ltp=trade.exit_ltp,
+#         total_price=trade.total_price,
+#         trade_entry_time=trade.trade_entry_time,
+#         trade_exit_time=trade.trade_exit_time,
+#         pnl=round(
+#             trade.price - trade.total_price if trade.trade_type == 'sell'
+#             else trade.total_price - trade.price,
+#             2
+#         ),
+#     )
+#     for trade, stock_name in trades
+# ]
+    
+#     unique_trades = list({tuple(trade.dict().items()): trade for trade in trade_responses}.values())
+
+#     return unique_trades
+
+
 @router.get("/trade-history/{user_id}", response_model=List[TradeHistoryResponse])
 def get_trade_history(user_id: int, db: Session = Depends(get_db)):
     # Get all UserActiveStrategy IDs for the user
@@ -115,33 +170,37 @@ def get_trade_history(user_id: int, db: Session = Depends(get_db)):
         .all()
     )
 
-    # Format the response using the schema
-    trade_responses = [
-    TradeHistoryResponse(
-        id=trade.id,
-        stock_name=stock_name,
-        order_id=trade.order_id,
-        stock_token=trade.stock_token,
-        trade_type=trade.trade_type,
-        quantity=trade.quantity,
-        price=trade.price,
-        entry_ltp=trade.entry_ltp,
-        exit_ltp=trade.exit_ltp,
-        total_price=trade.total_price,
-        trade_entry_time=trade.trade_entry_time,
-        trade_exit_time=trade.trade_exit_time,
-        pnl=round(
-            trade.price - trade.total_price if trade.trade_type == 'sell'
-            else trade.total_price - trade.price,
-            2
-        ),
-    )
-    for trade, stock_name in trades
-]
+    seen = set()
+    unique_trade_responses = []
 
-    return trade_responses
+    for trade, stock_name in trades:
+        key = (stock_name, trade.price, trade.entry_ltp)
+        if key in seen:
+            continue
+        seen.add(key)
 
+        response = TradeHistoryResponse(
+            id=trade.id,
+            stock_name=stock_name,
+            order_id=trade.order_id,
+            stock_token=trade.stock_token,
+            trade_type=trade.trade_type,
+            quantity=trade.quantity,
+            price=trade.price,
+            entry_ltp=trade.entry_ltp,
+            exit_ltp=trade.exit_ltp,
+            total_price=trade.total_price,
+            trade_entry_time=trade.trade_entry_time,
+            trade_exit_time=trade.trade_exit_time,
+            pnl=round(
+                trade.price - trade.total_price if trade.trade_type == 'sell'
+                else trade.total_price - trade.price,
+                2
+            ),
+        )
+        unique_trade_responses.append(response)
 
+    return unique_trade_responses
 
 
 @router.get("/get/piechart/data")
