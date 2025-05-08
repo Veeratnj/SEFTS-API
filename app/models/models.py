@@ -3,7 +3,6 @@ from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Float, Boo
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
-
 class User(Base):
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True, index=True)
@@ -14,8 +13,12 @@ class User(Base):
     age = Column(Integer)
     gender = Column(String(10))
     role = Column(String(20), nullable=False)
+
     active_strategies = relationship("UserActiveStrategy", back_populates="user")
     login_track = relationship("LoginTrack", back_populates="user")
+
+    def __str__(self):
+        return f"{self.name} ({self.email})"
 
 class LoginTrack(Base):
     __tablename__ = 'login_track'
@@ -26,24 +29,11 @@ class LoginTrack(Base):
     logout_time = Column(DateTime, nullable=True)
     ip_address = Column(String(50), nullable=False)
     device_info = Column(String(100), nullable=False)
+
     user = relationship("User", back_populates="login_track")
 
-
-# class UserBrokerAccount(Base):
-#     __tablename__ = 'user_broker_account'
-#     id = Column(Integer, primary_key=True, index=True)
-#     user_id = Column(Integer, ForeignKey('user.id'))
-#     broker_name = Column(String(50), nullable=False)
-#     account_number = Column(String(50), unique=True, nullable=False)
-#     api_key = Column(String(100), unique=True, nullable=False)
-#     secret_key = Column(String(100), unique=True, nullable=False)
-#     totp=Column(String, nullable=False)
-#     pin=Column(Integer, nullable=False)
-#     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
-#     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
-
-#     user = relationship("User", back_populates="user_broker_account")
-
+    def __str__(self):
+        return f"Login #{self.id} - {self.user.name}"
 
 class Stocks(Base):
     __tablename__ = 'stocks'
@@ -52,12 +42,14 @@ class Stocks(Base):
     token = Column(String, unique=True, nullable=False)
     exchange = Column(String, nullable=False)
     is_hotlist = Column(Boolean, nullable=False, default=False)
-    trend_type = Column(String, nullable=False)  # 'bullish' or 'bearish'
+    trend_type = Column(String, nullable=False)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
     created_by = Column(Integer, nullable=False, default=0)
     is_deleted = Column(Boolean, nullable=False, default=False)
 
+    def __str__(self):
+        return f"{self.stock_name} ({self.exchange})"
 
 class StockDetails(Base):
     __tablename__ = 'stock_details'
@@ -67,9 +59,10 @@ class StockDetails(Base):
     ltp = Column(Float, nullable=False)
     last_update = Column(DateTime, nullable=False, default=datetime.utcnow)
 
-    # Corrected: This establishes the reverse relationship with UserActiveStrategy
     active_strategies = relationship("UserActiveStrategy", back_populates="stock_details")
 
+    def __str__(self):
+        return f"{self.stock_name} ({self.token})"
 
 class Strategy(Base):
     __tablename__ = 'strategy'
@@ -85,6 +78,8 @@ class Strategy(Base):
 
     active_strategies = relationship("UserActiveStrategy", back_populates="strategy")
 
+    def __str__(self):
+        return f"{self.strategy_name}"
 
 class UserActiveStrategy(Base):
     __tablename__ = 'user_active_strategy'
@@ -101,14 +96,15 @@ class UserActiveStrategy(Base):
     is_started = Column(Boolean, nullable=False, default=False)
     deactivated_at = Column(DateTime, nullable=True, default=None)
     deactivated_by = Column(Integer, nullable=True, default=None)
-    status = Column(String, nullable=False, default='pending')  # 'pending' 'active', 'close', 'rejected'
+    status = Column(String, nullable=False, default='pending')
 
-    # Relationships
     user = relationship("User", back_populates="active_strategies")
     strategy = relationship("Strategy", back_populates="active_strategies")
     stock_details = relationship("StockDetails", back_populates="active_strategies")
     order_managers = relationship("OrderManager", back_populates="user_active_strategy")
 
+    def __str__(self):
+        return f"{self.user.name} - {self.strategy.strategy_name} - {self.stock_token}"
 
 class OrderManager(Base):
     __tablename__ = 'order_manager'
@@ -120,29 +116,29 @@ class OrderManager(Base):
     is_active = Column(Boolean, nullable=False, default=True)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
-
-    # New foreign key
     user_active_strategy_id = Column(Integer, ForeignKey('user_active_strategy.id'), nullable=False)
 
-    # Relationships
     user_active_strategy = relationship("UserActiveStrategy", back_populates="order_managers")
 
+    def __str__(self):
+        return f"Order #{self.order_id}"
 
 class EquityTradeHistory(Base):
     __tablename__ = 'equity_trade_history'
     id = Column(Integer, primary_key=True, index=True)
     order_id = Column(String, ForeignKey('order_manager.order_id'))
     stock_token = Column(String, ForeignKey('stock_details.token'))
-    trade_type = Column(String, nullable=False)  # 'buy' or 'sell'
+    trade_type = Column(String, nullable=False)
     quantity = Column(Integer, nullable=False)
     price = Column(Float, nullable=False)
-    entry_ltp=Column(Float, nullable=False)
-    exit_ltp=Column(Float, nullable=False)
+    entry_ltp = Column(Float, nullable=False)
+    exit_ltp = Column(Float, nullable=False)
     total_price = Column(Float, nullable=False)
     trade_entry_time = Column(DateTime, nullable=False, default=datetime.utcnow)
     trade_exit_time = Column(DateTime, nullable=False, default=datetime.utcnow)
+
     order_manager = relationship("OrderManager")
     stock_details = relationship("StockDetails")
 
-
-
+    def __str__(self):
+        return f"Trade {self.id} ({self.trade_type} {self.quantity} @ {self.price})"

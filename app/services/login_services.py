@@ -20,6 +20,7 @@ def authenticate_user(email: str, password: str, db: Session) -> dict:
     print('email',email)
     print('password',password)  
     user = db.query(User).filter(User.email == email).first()
+    print('user',user)
     if not user or user.password != password:
         return None
 

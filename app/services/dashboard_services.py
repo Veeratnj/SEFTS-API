@@ -26,7 +26,10 @@ def get_all_pending_orders_services( user_id: int,db):
     pass
 
 
-
+def format_datetime(dt):
+    if dt is None:
+        return None
+    return dt.strftime('%Y-%m-%d %H:%M')
 
 
 
@@ -106,12 +109,15 @@ def get_orders_services1(user_id: int, order_type: str, db):
 def get_orders_services(user_id: int, order_type: str, db):
     query = db.query(
         StockDetails.stock_name,
+        StockDetails.ltp,
         UserActiveStrategy.quantity,
         EquityTradeHistory.trade_type,
         EquityTradeHistory.entry_ltp,
         EquityTradeHistory.exit_ltp,
         EquityTradeHistory.total_price,
-        EquityTradeHistory.price
+        EquityTradeHistory.price,
+        EquityTradeHistory.trade_entry_time,
+        EquityTradeHistory.trade_exit_time,
     ).join(
         OrderManager, UserActiveStrategy.id == OrderManager.user_active_strategy_id
     ).join(
@@ -158,9 +164,11 @@ def get_orders_services(user_id: int, order_type: str, db):
         total_price = record.total_price if hasattr(record, 'total_price') else None
         price = record.price if hasattr(record, 'price') else None
         ltp = record.ltp if hasattr(record, 'ltp') else None
+        entry_time=record.trade_entry_time if hasattr(record, 'trade_entry_time') else None
+        exit_time=record.trade_exit_time if hasattr(record, 'trade_exit_time') else None
 
-        # Calculate gain or loss
         gain_loss = None
+        
         if trade_type == "buy":
             # For buy: total_price - price
             if total_price and price:
@@ -173,18 +181,22 @@ def get_orders_services(user_id: int, order_type: str, db):
         # Round off the gain_loss to 2 decimal places
         if gain_loss is not None:
             gain_loss = round(gain_loss, 2)
-
+        print(entry_time)
+        print(type(entry_time))
         result.append({
             "key": idx + 1,
             "stockName": stock_name,
             "orderType": trade_type,
             "qty": quantity,
-            "atp": entry_ltp,
+            "entry_ltp": entry_ltp,
+            "exit_ltp": exit_ltp,
             "ltp": ltp if ltp else entry_ltp,  # for pending, use ltp
             "gainLoss": gain_loss,
             "sl": None,
             "tg": None,
             'rejected_time': None,
+            'entry_time': format_datetime(entry_time),
+            'exit_time': format_datetime(exit_time)
         })
 
     return result
