@@ -3,7 +3,7 @@
 from sqladmin import Admin, ModelView
 from fastapi import FastAPI
 from app.db.db import engine  # your engine
-from app.models.models import User, Strategy, StockDetails, UserActiveStrategy, OrderManager, EquityTradeHistory, LoginTrack
+from app.models.models import User, Strategy, StockDetails, UserActiveStrategy, OrderManager, EquityTradeHistory, LoginTrack,Stocks
 
 # Admin Views
 class UserAdmin(ModelView, model=User):
@@ -29,6 +29,11 @@ class LoginTrackAdmin(ModelView, model=LoginTrack):
     column_list = [LoginTrack.id, LoginTrack.user_id, LoginTrack.login_time, LoginTrack.logout_time, LoginTrack.ip_address]
 
 
+class StocksAdmin(ModelView, model=Stocks):
+    column_list = [Stocks.id, Stocks.stock_name, Stocks.token, Stocks.exchange, Stocks.is_hotlist, Stocks.trend_type, Stocks.created_at, Stocks.updated_at, Stocks.created_by, Stocks.is_deleted]
+
+
+
 # Attach to app
 def setup_admin(app: FastAPI):
     admin = Admin(app, engine)
@@ -39,3 +44,4 @@ def setup_admin(app: FastAPI):
     admin.add_view(OrderManagerAdmin)
     admin.add_view(EquityTradeHistoryAdmin)
     admin.add_view(LoginTrackAdmin)
+    admin.add_view(StocksAdmin)
