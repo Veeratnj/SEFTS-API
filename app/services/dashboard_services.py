@@ -106,7 +106,7 @@ def get_orders_services1(user_id: int, order_type: str, db):
 
     return result
 
-def get_orders_services(user_id: int, order_type: str, db):
+def get_orders_services2(user_id: int, order_type: str, db):
     query = db.query(
         StockDetails.stock_name,
         StockDetails.ltp,
@@ -183,6 +183,106 @@ def get_orders_services(user_id: int, order_type: str, db):
             gain_loss = round(gain_loss, 2)
         print(entry_time)
         print(type(entry_time))
+        result.append({
+            "key": idx + 1,
+            "stockName": stock_name,
+            "orderType": trade_type,
+            "qty": quantity,
+            "entry_ltp": entry_ltp,
+            "exit_ltp": exit_ltp,
+            "ltp": ltp if ltp else entry_ltp,  # for pending, use ltp
+            "gainLoss": gain_loss,
+            "sl": None,
+            "tg": None,
+            'rejected_time': None,
+            'entry_time': format_datetime(entry_time),
+            'exit_time': format_datetime(exit_time)
+        })
+
+    return result
+
+
+def get_orders_services(user_id: int, order_type: str, db):
+    query = db.query(
+        StockDetails.stock_name,
+        StockDetails.ltp,
+        UserActiveStrategy.quantity,
+        EquityTradeHistory.trade_type,
+        EquityTradeHistory.entry_ltp,
+        EquityTradeHistory.exit_ltp,
+        EquityTradeHistory.total_price,
+        EquityTradeHistory.price,
+        EquityTradeHistory.trade_entry_time,
+        EquityTradeHistory.trade_exit_time,
+    ).join(
+        OrderManager, UserActiveStrategy.id == OrderManager.user_active_strategy_id
+    ).join(
+        EquityTradeHistory, OrderManager.order_id == EquityTradeHistory.order_id
+    ).join(
+        StockDetails, UserActiveStrategy.stock_token == StockDetails.token
+    ).filter(
+        UserActiveStrategy.user_id == user_id,
+        func.date(EquityTradeHistory.trade_entry_time) == datetime.utcnow().date()
+    )
+
+    # Apply status-based filtering
+    print(query.all())
+    if order_type == "close":
+        query = query.filter(UserActiveStrategy.status == 'close')
+    elif order_type == "active":
+        query = query.filter(UserActiveStrategy.status == 'active')
+    elif order_type == "pending":
+        query = db.query(
+            StockDetails.stock_name,
+            UserActiveStrategy.quantity,
+            StockDetails.ltp
+        ).join(
+            User, User.id == UserActiveStrategy.user_id
+        ).join(
+            StockDetails, UserActiveStrategy.stock_token == StockDetails.token
+        ).filter(
+            User.id == user_id,
+            UserActiveStrategy.status == 'pending',
+            func.date(UserActiveStrategy.created_at) == datetime.utcnow().date()  # Assuming `created_at` is the relevant date field for pending orders
+        )
+    elif order_type == "rejected":
+        query = query.filter(
+            UserActiveStrategy.status == 'rejected',
+            func.date(UserActiveStrategy.updated_at) == datetime.utcnow().date()  # Assuming `updated_at` is the relevant date field for rejected orders
+        )
+    else:
+        return []
+
+    records = query.all()
+
+    result = []
+    for idx, record in enumerate(records):
+        stock_name = record.stock_name if hasattr(record, 'stock_name') else None
+        quantity = record.quantity if hasattr(record, 'quantity') else None
+        trade_type = record.trade_type if hasattr(record, 'trade_type') else None
+        entry_ltp = record.entry_ltp if hasattr(record, 'entry_ltp') else None
+        exit_ltp = record.exit_ltp if hasattr(record, 'exit_ltp') else None
+        total_price = record.total_price if hasattr(record, 'total_price') else None
+        price = record.price if hasattr(record, 'price') else None
+        ltp = record.ltp if hasattr(record, 'ltp') else None
+        entry_time = record.trade_entry_time if hasattr(record, 'trade_entry_time') else None
+        exit_time = record.trade_exit_time if hasattr(record, 'trade_exit_time') else None
+
+        gain_loss = None
+
+        if trade_type == "buy":
+            # For buy: total_price - price
+            if total_price and price:
+                gain_loss = total_price - price
+        elif trade_type == "sell":
+            # For sell: price - total_price
+            if price and total_price:
+                gain_loss = price - total_price
+
+        # Round off the gain_loss to 2 decimal places
+        if gain_loss is not None:
+            gain_loss = round(gain_loss, 2)
+
         result.append({
             "key": idx + 1,
             "stockName": stock_name,
