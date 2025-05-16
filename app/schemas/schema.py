@@ -57,3 +57,28 @@ class TradeHistoryResponse(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class StocksSchema(BaseModel):
+    stock_name: str
+    token: str
+    exchange: str
+    is_hotlist: bool
+    trend_type: str
+    created_at: datetime
+    updated_at: datetime
+    created_by: int
+    is_deleted: bool
+
+    class Config:
+        from_attributes = True
+
+
+class StockDetailsSchema(BaseModel):
+    stock_name: str
+    token: str
+    ltp: float
+    last_update: datetime
+
+    class Config:
+        from_attributes = True
