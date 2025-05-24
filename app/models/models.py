@@ -135,7 +135,7 @@ class EquityTradeHistory(Base):
     exit_ltp = Column(Float, nullable=False)
     total_price = Column(Float, nullable=False)
     trade_entry_time = Column(DateTime, nullable=False, default=datetime.utcnow)
-    trade_exit_time = Column(DateTime, nullable=False, default=datetime.utcnow)
+    trade_exit_time = Column(DateTime, nullable=True, default=datetime.utcnow)
 
     order_manager = relationship("OrderManager")
     stock_details = relationship("StockDetails")

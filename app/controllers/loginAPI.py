@@ -27,6 +27,7 @@ async def login(request: LoginRequest,db: Session = Depends(get_db)):
         
         # Authenticate the user
         data = authenticate_user(email=request.email, password=request.password,db=db)
+        print(data)
         # print(token)
         if  data is None:
             raise HTTPException(status_code=401, detail="Invalid email or password")

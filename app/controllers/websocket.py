@@ -43,4 +43,4 @@ async def websocket_endpoint(websocket: WebSocket):
             await websocket.send_json({"client_id": client_id, "live_prices": live_prices_list})
             await asyncio.sleep(1)
     except WebSocketDisconnect:
-        print(f"WebSocket disconnected for client {client_id}")
+        print(f"WebSocket disconnected")
