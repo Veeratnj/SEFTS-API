@@ -5,7 +5,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from sqlalchemy import case
-from sqlalchemy import func
+from sqlalchemy import func,or_
 from sqlalchemy.orm import joinedload
 from app.models.models import EquityTradeHistory, OrderManager, StockDetails, User, UserActiveStrategy
 
@@ -205,6 +205,7 @@ def get_orders_services2(user_id: int, order_type: str, db):
 def get_orders_services(user_id: int, order_type: str, db):
     query = db.query(
         StockDetails.stock_name,
+        StockDetails.token,
         StockDetails.ltp,
         UserActiveStrategy.quantity,
         EquityTradeHistory.trade_type,
@@ -226,7 +227,7 @@ def get_orders_services(user_id: int, order_type: str, db):
     )
 
     # Apply status-based filtering
-    print(query.all())
+    # print(query.all())
     if order_type == "close":
         query = query.filter(UserActiveStrategy.status == 'close')
     elif order_type == "active":
@@ -242,13 +243,17 @@ def get_orders_services(user_id: int, order_type: str, db):
             StockDetails, UserActiveStrategy.stock_token == StockDetails.token
         ).filter(
             User.id == user_id,
-            UserActiveStrategy.status == 'pending',
-            func.date(UserActiveStrategy.created_at) == datetime.utcnow().date()  # Assuming `created_at` is the relevant date field for pending orders
+            # UserActiveStrategy.status == 'pending',
+            or_(
+                UserActiveStrategy.status == 'pending',
+                UserActiveStrategy.status == 'inprogress'
+            ),
+            func.date(UserActiveStrategy.created_at) == datetime.utcnow().date()  
         )
     elif order_type == "rejected":
         query = query.filter(
             UserActiveStrategy.status == 'rejected',
-            func.date(UserActiveStrategy.updated_at) == datetime.utcnow().date()  # Assuming `updated_at` is the relevant date field for rejected orders
+            func.date(UserActiveStrategy.updated_at) == datetime.utcnow().date()  
         )
     else:
         return []
@@ -258,6 +263,7 @@ def get_orders_services(user_id: int, order_type: str, db):
     result = []
     for idx, record in enumerate(records):
         stock_name = record.stock_name if hasattr(record, 'stock_name') else None
+        token = record.token if hasattr(record, 'token') else None
         quantity = record.quantity if hasattr(record, 'quantity') else None
         trade_type = record.trade_type if hasattr(record, 'trade_type') else None
         entry_ltp = record.entry_ltp if hasattr(record, 'entry_ltp') else None
@@ -286,6 +292,7 @@ def get_orders_services(user_id: int, order_type: str, db):
         result.append({
             "key": idx + 1,
             "stockName": stock_name,
+            "token": token,
             "orderType": trade_type,
             "qty": quantity,
             "entry_ltp": entry_ltp,
