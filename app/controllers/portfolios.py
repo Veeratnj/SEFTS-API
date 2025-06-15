@@ -13,7 +13,9 @@ from app.services.dashboard_services import (
     get_orders_services,
     get_piechart_data_services,
     get_speedometer_data_service,
+    get_pending_orders_services,
 )
+
 
 
 
@@ -22,7 +24,9 @@ router = APIRouter()
 @router.get("/get/pending/orders")
 def get_all_pending_orders( user_id: int,db: Session = Depends(get_db)):
     try:
-        result=get_orders_services(user_id=user_id,db=db,order_type='pending')
+        # result=get_orders_services(user_id=user_id,db=db,order_type='pending')
+        result=get_pending_orders_services(user_id=user_id,db=db)
+        print("Pending orders result:", result)
         return CommonResponse(
             status=200,
             data=result,
@@ -32,7 +36,7 @@ def get_all_pending_orders( user_id: int,db: Session = Depends(get_db)):
         print("Error during fetching pending orders:", str(e))
         return CommonResponse(
             status=500,
-            data={},
+            data=e,
             msg="Failed to fetch pending orders"
         )
 

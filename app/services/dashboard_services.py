@@ -1,13 +1,14 @@
 
 
 
+from operator import and_
 from sqlalchemy import func
 from sqlalchemy.orm import Session
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,date
 from sqlalchemy import case
 from sqlalchemy import func,or_
 from sqlalchemy.orm import joinedload
-from app.models.models import EquityTradeHistory, OrderManager, StockDetails, User, UserActiveStrategy
+from app.models.models import EquityTradeHistory, OrderManager, StockDetails, Stocks, User, UserActiveStrategy
 
 
 def get_all_active_orders_services( user_id: int,db):
@@ -259,6 +260,7 @@ def get_orders_services(user_id: int, order_type: str, db):
         return []
 
     records = query.all()
+    print('records :: ',query.all())
 
     result = []
     for idx, record in enumerate(records):
@@ -275,7 +277,7 @@ def get_orders_services(user_id: int, order_type: str, db):
         exit_time = record.trade_exit_time if hasattr(record, 'trade_exit_time') else None
 
         gain_loss = None
-
+        # print(total_price, price, trade_type)
         if trade_type == "buy":
             # For buy: total_price - price
             if total_price and price:
@@ -288,6 +290,7 @@ def get_orders_services(user_id: int, order_type: str, db):
         # Round off the gain_loss to 2 decimal places
         if gain_loss is not None:
             gain_loss = round(gain_loss, 2)
+        print(trade_type)
 
         result.append({
             "key": idx + 1,
@@ -307,6 +310,38 @@ def get_orders_services(user_id: int, order_type: str, db):
         })
 
     return result
+
+
+def get_pending_orders_services(user_id, db):
+    
+    today = datetime.utcnow().date()
+    start_datetime = datetime.combine(today, datetime.min.time())
+    end_datetime = datetime.combine(today, datetime.max.time())
+
+    result = (db.query(
+        StockDetails.stock_name.label('stockName'),
+        StockDetails.token.label('token'),
+        StockDetails.ltp.label('ltp'),
+        Stocks.trend_type.label('orderType'),
+        UserActiveStrategy.quantity.label('qty'),
+        UserActiveStrategy.created_at.label('created_at'),
+    ).join(
+        StockDetails, UserActiveStrategy.stock_token == StockDetails.token
+    ).join(
+        Stocks, StockDetails.token == Stocks.token
+    ).filter(UserActiveStrategy.user_id == user_id)
+    .filter(UserActiveStrategy.status.in_(['pending', 'inprogress']))
+    .filter(func.date(UserActiveStrategy.created_at) == today))
+
+
+
+    print('db query ::', str(result.statement))  # ✅ Fixed
+    rows = result.all()
+    print('rows :: ', user_id)
+    # input()
+    return [dict(row._mapping) for row in rows]
+    # return {"data":"rows"}
+
 
 
 def get_piechart_data_services1(user_id: int,filter:str, db: Session):
