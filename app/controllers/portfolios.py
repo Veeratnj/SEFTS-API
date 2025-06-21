@@ -182,7 +182,6 @@ def get_trade_history(user_id: int, db: Session = Depends(get_db)):
         if key in seen:
             continue
         seen.add(key)
-
         response = TradeHistoryResponse(
             id=trade.id,
             stock_name=stock_name,

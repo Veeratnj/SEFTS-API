@@ -1,5 +1,5 @@
 .venv
-.log
+*.log
 __pycache__/
 app/__pycache__/*
 *.pyc
