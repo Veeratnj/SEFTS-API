@@ -1,8 +1,8 @@
 import json
 from typing import List
 from app.models.models import EquityTradeHistory, OrderManager, StockDetails, UserActiveStrategy
-from app.schemas.schema import CommonResponse, TradeHistoryResponse
-from fastapi import APIRouter, HTTPException ,Depends
+from app.schemas.schema import CommonResponse, TradeHistoryRequest, TradeHistoryResponse
+from fastapi import APIRouter, HTTPException ,Depends, Query
 from pydantic import BaseModel
 from app.services.login_services import authenticate_user
 from app.cryptography.crypt import decrypt
@@ -14,6 +14,7 @@ from app.services.dashboard_services import (
     get_piechart_data_services,
     get_speedometer_data_service,
     get_pending_orders_services,
+    get_trade_history_services,
 )
 
 
@@ -149,61 +150,29 @@ def get_all_open_orders(user_id: int,db: Session = Depends(get_db)):
 #     return unique_trades
 
 
-@router.get("/trade-history/{user_id}", response_model=List[TradeHistoryResponse])
-def get_trade_history(user_id: int, db: Session = Depends(get_db)):
-    # Get all UserActiveStrategy IDs for the user
-    user_strategies = db.query(UserActiveStrategy).filter(UserActiveStrategy.user_id == user_id).all()
-
-    if not user_strategies:
-        raise HTTPException(status_code=404, detail="User not found or has no active strategies")
-
-    strategy_ids = [strategy.id for strategy in user_strategies]
-
-    # Get all OrderManagers related to these strategies
-    orders = db.query(OrderManager).filter(OrderManager.user_active_strategy_id.in_(strategy_ids)).all()
-    order_ids = [order.order_id for order in orders]
-
-    # Join EquityTradeHistory with StockDetails to fetch stock_name
-    trades = (
-        db.query(
-            EquityTradeHistory,
-            StockDetails.stock_name
+@router.post("/trade-history")
+def get_trade_history(payload: TradeHistoryRequest, db: Session = Depends(get_db)):
+    try:
+        result = get_trade_history_services(
+            user_id=payload.user_id,
+            db=db,
+            flag=payload.flag,
+            limit=payload.limit,
+            offset=payload.offset,
+            type=payload.type
         )
-        .join(StockDetails, EquityTradeHistory.stock_token == StockDetails.token)
-        .filter(EquityTradeHistory.order_id.in_(order_ids))
-        .all()
-    )
-
-    seen = set()
-    unique_trade_responses = []
-
-    for trade, stock_name in trades:
-        key = (stock_name, trade.price, trade.entry_ltp)
-        if key in seen:
-            continue
-        seen.add(key)
-        response = TradeHistoryResponse(
-            id=trade.id,
-            stock_name=stock_name,
-            order_id=trade.order_id,
-            stock_token=trade.stock_token,
-            trade_type=trade.trade_type,
-            quantity=trade.quantity,
-            price=trade.price,
-            entry_ltp=trade.entry_ltp,
-            exit_ltp=trade.exit_ltp,
-            total_price=trade.total_price,
-            trade_entry_time=trade.trade_entry_time,
-            trade_exit_time=trade.trade_exit_time,
-            pnl=round(
-                trade.price - trade.total_price if trade.trade_type == 'sell'
-                else trade.total_price - trade.price,
-                2
-            ),
+        return CommonResponse(
+            status=200,
+            data=result,
+            msg="Trade history fetched successfully"
         )
-        unique_trade_responses.append(response)
-
-    return unique_trade_responses
+    except Exception as e:
+        print("Error:", str(e))
+        return CommonResponse(
+            status=500,
+            data={'error': str(e)},
+            msg="Failed to fetch trade history"
+        )
 
 
 @router.get("/get/piechart/data")

@@ -56,7 +56,7 @@ class TradeHistoryResponse(BaseModel):
     pnl: float
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class StocksSchema(BaseModel):
@@ -82,3 +82,10 @@ class StockDetailsSchema(BaseModel):
 
     class Config:
         from_attributes = True
+
+class TradeHistoryRequest(BaseModel):
+    user_id: int
+    flag: int
+    limit: int = 100
+    offset: int = 0
+    type: str | None = None  # Optional field

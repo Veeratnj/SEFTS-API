@@ -2,6 +2,8 @@
 
 
 from operator import and_
+from typing import Optional
+from fastapi import HTTPException
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta,date
@@ -9,6 +11,7 @@ from sqlalchemy import case
 from sqlalchemy import func,or_
 from sqlalchemy.orm import joinedload
 from app.models.models import EquityTradeHistory, OrderManager, StockDetails, Stocks, User, UserActiveStrategy
+from app.schemas.schema import TradeHistoryResponse
 
 
 def get_all_active_orders_services( user_id: int,db):
@@ -740,4 +743,86 @@ def get_speedometer_data_service(user_id: int, filter: str, db: Session):
     return {
     "total_profit": round(result.total_profit, 2) if result.total_profit else 0,
     "total_loss": round(result.total_loss, 2) if result.total_loss else 0
+    }
+
+def get_date_range_by_flag(flag: int) -> tuple[datetime, datetime]:
+    from datetime import datetime, timedelta
+
+    today = datetime.today()
+    if flag == 1:
+        start_date = today
+    elif flag == 2:
+        start_date = today - timedelta(days=7)
+    elif flag == 3:
+        start_date = today - timedelta(days=30)
+    elif flag == 4:
+        start_date = today - timedelta(days=365)
+    elif flag == 5:
+        # All data - set start_date far in the past
+        start_date = datetime(2000, 1, 1)
+    
+    else:
+        raise ValueError("Invalid flag. Must be 1 (today), 2 (7 days), 3 (30 days), or 4 (365 days)")
+
+    return (
+        start_date.replace(hour=0, minute=0, second=0, microsecond=0),
+        today.replace(hour=23, minute=59, second=59, microsecond=999999)
+    )
+
+
+def get_trade_history_services(user_id: int, db: Session, flag: int, limit: int, offset: int, type: Optional[str] = None):
+    start_date, end_date = get_date_range_by_flag(flag)
+
+    # Get order IDs of user
+    order_ids = (
+        db.query(OrderManager.order_id)
+        .join(UserActiveStrategy, UserActiveStrategy.id == OrderManager.user_active_strategy_id)
+        .filter(UserActiveStrategy.user_id == user_id)
+        .subquery()
+    )
+
+    # Base query
+    query = (
+        db.query(EquityTradeHistory, StockDetails.stock_name)
+        .join(StockDetails, EquityTradeHistory.stock_token == StockDetails.token)
+        .filter(
+            EquityTradeHistory.order_id.in_(order_ids),
+            func.date(EquityTradeHistory.trade_entry_time).between(start_date.date(), end_date.date()),
+            EquityTradeHistory.trade_exit_time.isnot(None)
+        )
+    )
+
+    if type:
+        query = query.filter(EquityTradeHistory.trade_type.ilike(type.lower()))
+
+    total = query.count()
+
+    trades = query.offset(offset).limit(limit).all()
+
+    results = []
+    for trade, stock_name in trades:
+        pnl = round(
+            trade.price - trade.total_price if trade.trade_type == 'sell'
+            else trade.total_price - trade.price,
+            2
+        )
+        results.append(TradeHistoryResponse(
+            id=trade.id,
+            stock_name=stock_name,
+            order_id=trade.order_id,
+            stock_token=trade.stock_token,
+            trade_type=trade.trade_type,
+            quantity=trade.quantity,
+            price=trade.price,
+            entry_ltp=trade.entry_ltp,
+            exit_ltp=trade.exit_ltp,
+            total_price=trade.total_price,
+            trade_entry_time=trade.trade_entry_time,
+            trade_exit_time=trade.trade_exit_time,
+            pnl=pnl
+        ))
+
+    return {
+        "records": results,
+        "total": total
     }
