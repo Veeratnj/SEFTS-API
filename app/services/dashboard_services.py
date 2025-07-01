@@ -211,7 +211,7 @@ def get_orders_services(user_id: int, order_type: str, db):
         StockDetails.stock_name,
         StockDetails.token,
         StockDetails.ltp,
-        UserActiveStrategy.quantity,
+        UserActiveStrategy.quantity ,
         EquityTradeHistory.trade_type,
         EquityTradeHistory.entry_ltp,
         EquityTradeHistory.exit_ltp,
