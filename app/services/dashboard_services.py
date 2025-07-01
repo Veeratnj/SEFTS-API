@@ -789,7 +789,7 @@ def get_trade_history_services(user_id: int, db: Session, flag: int, limit: int,
             EquityTradeHistory.order_id.in_(order_ids),
             func.date(EquityTradeHistory.trade_entry_time).between(start_date.date(), end_date.date()),
             EquityTradeHistory.trade_exit_time.isnot(None)
-        )
+        ).order_by(EquityTradeHistory.trade_entry_time.desc()) 
     )
 
     if type:
