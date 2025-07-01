@@ -1,19 +1,35 @@
-import asyncio
-import websockets
-import json
+import requests
+import pandas as pd
 
-async def listen():
-    uri = "ws://13.127.115.72:8000/websocket/ws/stocks"
-    async with websockets.connect(uri) as websocket:
-        # Send initial payload
-        await websocket.send(json.dumps({
-            "client_id": "test_client",
-            "tokens": ["RELIANCE", "TCS", "INFY"]
-        }))
+# Endpoint URL
+url = "http://localhost:8000/portfolios/trade-history"
 
-        while True:
-            response = await websocket.recv()
-            data = json.loads(response)
-            print("Received:", data)
+# POST Payload
+payload = {
+    "user_id": 7,
+    "flag": 5,
+    "offset": 1,
+    "limit": 1000000000000,
+    "type": None
+}
 
-asyncio.run(listen())
+# Send POST request
+response = requests.post(url, json=payload)
+
+# Handle response
+if response.status_code == 200:
+    response_json = response.json()
+
+    # Extract records list from data
+    records = response_json.get("data", {}).get("records", [])
+    total = response_json.get("data", {}).get("total", 0)
+
+    # Convert to DataFrame
+    df = pd.DataFrame(records)
+
+    # Save to Excel
+    df.to_csv("trade_history.csv", index=False)
+    print(f"Saved {len(df)} of {total} records to 'trade_history.xlsx'")
+else:
+    print(f"Request failed: {response.status_code}")
+    print(response.text)
