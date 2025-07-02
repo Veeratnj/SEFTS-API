@@ -12,11 +12,10 @@ from sqlalchemy import func,or_
 from sqlalchemy.orm import joinedload
 from app.models.models import EquityTradeHistory, OrderManager, StockDetails, Stocks, User, UserActiveStrategy
 from app.schemas.schema import TradeHistoryResponse
+from sqlalchemy.orm import aliased
+from sqlalchemy import func, case, cast, Numeric
 
 
-def get_all_active_orders_services( user_id: int,db):
-    pass
-    
 
 def get_all_closed_orders_services( user_id: int,db):
     pass
@@ -211,7 +210,7 @@ def get_orders_services(user_id: int, order_type: str, db):
         StockDetails.stock_name,
         StockDetails.token,
         StockDetails.ltp,
-        UserActiveStrategy.quantity ,
+        EquityTradeHistory.quantity ,
         EquityTradeHistory.trade_type,
         EquityTradeHistory.entry_ltp,
         EquityTradeHistory.exit_ltp,
@@ -344,6 +343,118 @@ def get_pending_orders_services(user_id, db):
     # input()
     return [dict(row._mapping) for row in rows]
     # return {"data":"rows"}
+
+
+
+def get_active_orders_services(user_id, db):
+    # Aliases for tables (optional but improves clarity)
+    eth = aliased(EquityTradeHistory)
+    s = aliased(Stocks)
+    sd = aliased(StockDetails)
+    om = aliased(OrderManager)
+    uas = aliased(UserActiveStrategy)
+
+    query = db.query(
+        s.stock_name.label("stock_name"),
+        eth.stock_token.label("token"),
+        eth.trade_type.label("order_type"),
+        eth.quantity.label("qty"),
+        eth.entry_ltp,
+        eth.exit_ltp,
+        sd.ltp,
+        eth.trade_entry_time,
+        eth.trade_exit_time
+    ).join(s, s.token == eth.stock_token
+    ).join(sd, sd.token == eth.stock_token
+    ).join(om, om.order_id == eth.order_id
+    ).join(uas, uas.id == om.user_active_strategy_id
+    ).filter(
+        uas.user_id == user_id,
+        func.date(eth.trade_entry_time) == func.current_date(),
+        func.lower(uas.status) == 'active'
+    )
+
+    results = query.all()
+
+    # Build the response list
+    response = []
+    for i, row in enumerate(results, start=1):
+        response.append({
+            "key": i,
+            "stockName": row.stock_name,
+            "token": row.token,
+            "orderType": row.order_type,
+            "qty": row.qty,
+            "entry_ltp": row.entry_ltp,
+            "exit_ltp": row.exit_ltp,
+            "ltp": row.ltp,
+            "gainLoss": None,             # Add calculation if needed
+            "sl": None,                   # Placeholder
+            "tg": None,                   # Placeholder
+            "rejected_time": None,        # Placeholder
+            "entry_time": row.trade_entry_time.strftime("%Y-%m-%d %H:%M") if row.trade_entry_time else None,
+            "exit_time": row.trade_exit_time.strftime("%Y-%m-%d %H:%M") if row.trade_exit_time else None
+        })
+
+    return response
+
+
+def get_close_order_services(user_id, db):
+    query = (
+        db.query(
+            Stocks.stock_name.label("stock_name"),
+            EquityTradeHistory.stock_token.label("token"),
+            EquityTradeHistory.trade_type.label("order_type"),
+            EquityTradeHistory.quantity.label("qty"),
+            EquityTradeHistory.entry_ltp,
+            EquityTradeHistory.exit_ltp,
+            EquityTradeHistory.trade_entry_time,
+            EquityTradeHistory.trade_exit_time,
+        )
+        .join(Stocks, Stocks.token == EquityTradeHistory.stock_token)
+        .join(OrderManager, OrderManager.order_id == EquityTradeHistory.order_id)
+        .join(UserActiveStrategy, UserActiveStrategy.id == OrderManager.user_active_strategy_id)
+        .filter(
+            UserActiveStrategy.user_id == user_id,
+            func.date(EquityTradeHistory.trade_entry_time) == func.current_date(),
+            EquityTradeHistory.exit_ltp > 0,  # closed trades only
+            func.lower(UserActiveStrategy.status) == "close"
+        )
+    )
+
+    results = query.all()
+
+    response = []
+    for i, row in enumerate(results, start=1):
+        entry_ltp = row.entry_ltp
+        exit_ltp = row.exit_ltp
+        qty = row.qty
+
+        # Calculate profit/loss
+        if row.order_type.lower() == "buy":
+            gain_loss = (exit_ltp - entry_ltp) * qty
+        else:
+            gain_loss = (entry_ltp - exit_ltp) * qty
+
+        response.append({
+            "key": i,
+            "stockName": row.stock_name,
+            "token": row.token,
+            "orderType": row.order_type.lower(),
+            "qty": qty,
+            "entry_ltp": entry_ltp,
+            "exit_ltp": exit_ltp,
+            "ltp": 0.0,  # LTP not needed for closed orders
+            "gainLoss": round(gain_loss, 2),
+            "sl": None,
+            "tg": None,
+            "rejected_time": None,
+            "entry_time": row.trade_entry_time.strftime("%Y-%m-%d %H:%M") if row.trade_entry_time else None,
+            "exit_time": row.trade_exit_time.strftime("%Y-%m-%d %H:%M") if row.trade_exit_time else None,
+        })
+
+    return response
+
 
 
 
