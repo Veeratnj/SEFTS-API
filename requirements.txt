@@ -27,15 +27,12 @@ rdflib-jsonld
 requests
 simplejson
 six
-smartapi-python
 Twisted
 txaio
 typing_extensions
 urllib3
 websocket-client
 zope.interface
-logzero
-smartapi-python
 pandas
 uvicorn[standard]
 psycopg2-binary
