@@ -89,3 +89,39 @@ class TradeHistoryRequest(BaseModel):
     limit: int = 100
     offset: int = 0
     type: str | None = None  # Optional field
+
+
+class OrderManagerCreateRequest(BaseModel):
+    order_id: str
+    completed_order_count: int
+    buy_count: int
+    sell_count: int
+    is_active: bool
+    created_at: datetime
+    updated_at: datetime
+    user_active_strategy_id: int
+
+
+class TradeEntryRequest(BaseModel):
+    order_id: str
+    stock_token: str
+    trade_type: str   # "buy" or "sell"
+    quantity: int
+    price: float
+    entry_ltp: float
+    exit_ltp: float
+    total_price: float
+    trade_entry_time: Optional[datetime]
+    trade_exit_time: Optional[datetime]
+
+
+
+class TradeExitRequest(BaseModel):
+    order_id: str
+    trade_type: str  # e.g., "buy" or "sell"
+    exit_ltp: float
+    total_price: float
+    trade_exit_time: Optional[datetime] = None
+
+
+

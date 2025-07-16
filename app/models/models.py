@@ -1,5 +1,6 @@
 from app.db.db import Base
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Float, Boolean
+from sqlalchemy import  Numeric,  BigInteger
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
@@ -58,7 +59,7 @@ class StockDetails(Base):
     token = Column(String, unique=True, nullable=False)
     ltp = Column(Float, nullable=False)
     last_update = Column(DateTime, nullable=False, default=datetime.utcnow)
-
+    symbol=Column(String,nullable=False)
     active_strategies = relationship("UserActiveStrategy", back_populates="stock_details")
 
     def __str__(self):
@@ -142,3 +143,39 @@ class EquityTradeHistory(Base):
 
     def __str__(self):
         return f"Trade {self.id} ({self.trade_type} {self.quantity} @ {self.price})"
+
+class OHLCData(Base):
+    __tablename__ = 'ohlc_data'
+
+    id = Column(BigInteger, primary_key=True, index=True)
+    token = Column(String(50), nullable=False)
+    start_time = Column(DateTime, nullable=False)
+    open = Column(Numeric(12, 2), nullable=False)
+    high = Column(Numeric(12, 2), nullable=False)
+    low = Column(Numeric(12, 2), nullable=False)
+    close = Column(Numeric(12, 2), nullable=False)
+    interval = Column(String(10))
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    def __str__(self):
+        return (f"OHLCData(id={self.id}, token={self.token}, "
+                f"time={self.start_time}, O={self.open}, H={self.high}, "
+                f"L={self.low}, C={self.close}, interval={self.interval})")
+
+class BankNiftyOHLCData(Base):
+    __tablename__ = 'bank_nifty_ohlc_data'
+
+    id = Column(Integer, primary_key=True, index=True)
+    token = Column(String(50), nullable=False)
+    start_time = Column(DateTime, nullable=False)
+    open = Column(Float, nullable=False)
+    high = Column(Float, nullable=False)
+    low = Column(Float, nullable=False)
+    close = Column(Float, nullable=False)
+    interval = Column(String(10))
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    def __str__(self):
+        return (f"BankNiftyOHLC(id={self.id}, token={self.token}, "
+                f"time={self.start_time}, O={self.open}, H={self.high}, "
+                f"L={self.low}, C={self.close}, interval={self.interval})")
