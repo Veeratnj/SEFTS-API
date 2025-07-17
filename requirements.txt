@@ -36,5 +36,5 @@ zope.interface
 pandas
 uvicorn[standard]
 psycopg2-binary
-jwt
+PyJWT
 sqladmin
