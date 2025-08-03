@@ -2,8 +2,8 @@ from datetime import datetime
 from fastapi import Depends
 from requests import Session
 from app.db.db import get_db
-from app.models.models import EquityTradeHistory, OHLCData, OrderManager, StockDetails
-from app.schemas.schema import CommonResponse, OrderManagerCreateRequest, TradeEntryRequest, TradeExitRequest
+from app.models.models import BankNiftyOptionsTradeHistory, EquityTradeHistory, OHLCData, OrderManager, StockDetails
+from app.schemas.schema import CommonResponse, OptionsCloseTradeRequest, OptionsOpenTradeRequest, OrderManagerCreateRequest, TradeEntryRequest, TradeExitRequest
 from fastapi import APIRouter, HTTPException ,Depends, Query
 from sqlalchemy import update
 
@@ -165,6 +165,58 @@ def update_trade_exit(payload: TradeExitRequest, db: Session = Depends(get_db)):
         msg=f"Trade exit updated successfully for {payload.trade_type} order.",
         data={"updated_rows": result.rowcount}
     )
+
+
+
+@router.post('/option/trade/open')
+def open_trade(req: OptionsOpenTradeRequest, db: Session = Depends(get_db)):
+    print('hello test')
+    entry_price = req.entry_ltp * req.quantity
+
+    trade = BankNiftyOptionsTradeHistory(
+        order_id=req.order_id,
+        option_symbol=req.option_symbol,
+        option_type=req.option_type,
+        trade_type=req.trade_type,
+        quantity=req.quantity,
+        entry_ltp=req.entry_ltp,
+        entry_price=entry_price,
+        trade_entry_time=req.trade_entry_time
+    )
+    db.add(trade)
+    db.commit()
+    db.refresh(trade)
+    return {"message": "Trade opened", "trade_id": trade.id}
+
+
+@router.post('/option/trade/close')
+def close_trade(req: OptionsCloseTradeRequest, db: Session = Depends(get_db)):
+    print('⏹️ Closing trade for user:', req.user_id)
+
+    # Fetch the latest open trade for this user (no exit_price)
+    trade = (
+        db.query(BankNiftyOptionsTradeHistory)
+        .filter(
+            BankNiftyOptionsTradeHistory.trade_type == "BUY",
+            BankNiftyOptionsTradeHistory.exit_price.is_(None),
+            BankNiftyOptionsTradeHistory.order_id.like(f"{req.user_id}_%")
+        )
+        .order_by(BankNiftyOptionsTradeHistory.trade_entry_time.desc())
+        .first()
+    )
+
+    if not trade:
+        raise HTTPException(status_code=404, detail="No open trade found for this user.")
+
+    # Mark as closed
+    trade.exit_ltp = req.exit_ltp
+    trade.exit_price = req.exit_ltp * trade.quantity
+    trade.trade_exit_time = req.trade_exit_time
+
+    db.commit()
+
+    return {"message": "Trade closed", "trade_id": trade.id}
+
 
 
 

@@ -1,5 +1,5 @@
 from app.db.db import Base
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Float, Boolean
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Float, Boolean,Date
 from sqlalchemy import  Numeric,  BigInteger
 from sqlalchemy.orm import relationship
 from datetime import datetime
@@ -179,3 +179,34 @@ class BankNiftyOHLCData(Base):
         return (f"BankNiftyOHLC(id={self.id}, token={self.token}, "
                 f"time={self.start_time}, O={self.open}, H={self.high}, "
                 f"L={self.low}, C={self.close}, interval={self.interval})")
+
+
+
+class BankNiftyOptionsTradeHistory(Base):
+    __tablename__ = "bank_nifty_options_trade_history"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    order_id = Column(String, nullable=False)
+    option_symbol = Column(String, nullable=False)             # e.g., BANKNIFTY24AUG48000CE
+    option_type = Column(String(2), nullable=False)            # 'CE' or 'PE'
+    trade_type = Column(String(10), nullable=False)            # 'BUY' or 'SELL'
+    quantity = Column(Integer, nullable=False)
+    entry_ltp = Column(Float, nullable=False)
+    exit_ltp = Column(Float, nullable=True)
+    entry_price = Column(Float, nullable=False)                # entry_ltp * quantity
+    exit_price = Column(Float, nullable=True)                  # exit_ltp * quantity
+    trade_entry_time = Column(DateTime, nullable=False)
+    trade_exit_time = Column(DateTime, nullable=True)
+
+    def __repr__(self):
+        return (
+            f"<BankNiftyOptionsTradeHistory(id={self.id}, order_id='{self.order_id}', "
+            f"symbol='{self.option_symbol}', type='{self.option_type}', "
+            f"trade='{self.trade_type}', qty={self.quantity}, "
+            f"entry_ltp={self.entry_ltp}, exit_ltp={self.exit_ltp}, "
+            f"entry_price={self.entry_price}, exit_price={self.exit_price}, "
+            f"entry_time={self.trade_entry_time}, exit_time={self.trade_exit_time})>"
+        )
+
+
+

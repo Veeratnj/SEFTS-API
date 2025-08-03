@@ -1,7 +1,8 @@
+from click import option
 from app.middleware.middleware import TimerMiddleware
 from fastapi import FastAPI
 from app.models import models
-from app.controllers import admin, common, portfolios, stand_alone_controllers,websocket,loginAPI
+from app.controllers import admin, common, portfolios, stand_alone_controllers,websocket,loginAPI,options
 from fastapi.middleware.cors import CORSMiddleware
 from app.db.db import engine
 from app.admin import setup_admin
@@ -36,6 +37,7 @@ def create_app():
     app.include_router(portfolios.router, prefix="/portfolios")
     app.include_router(admin.router, prefix="/custom/admin")
     app.include_router(stand_alone_controllers.router, prefix="/standalone")
+    app.include_router(options.router, prefix="/option")
 
     return app
 

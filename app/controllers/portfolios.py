@@ -1,6 +1,6 @@
 import json
 from typing import List
-from app.models.models import EquityTradeHistory, OrderManager, StockDetails, UserActiveStrategy
+from app.models.models import BankNiftyOptionsTradeHistory, EquityTradeHistory, OrderManager, StockDetails, UserActiveStrategy
 from app.schemas.schema import CommonResponse, TradeHistoryRequest, TradeHistoryResponse
 from fastapi import APIRouter, HTTPException ,Depends, Query
 from pydantic import BaseModel
@@ -234,3 +234,21 @@ def get_speedometer_data(user_id: int,filter:str,db: Session = Depends(get_db)):
             data={'error': str(e)},
             msg="Failed to fetch speedometer data"
         )
+    
+
+@router.get("/option/trade/open/{user_id}")
+def get_open_trades(user_id: int, db: Session = Depends(get_db)):
+    trades = (
+        db.query(BankNiftyOptionsTradeHistory)
+        .filter(
+            BankNiftyOptionsTradeHistory.trade_type == "BUY",
+            BankNiftyOptionsTradeHistory.exit_price.is_(None),
+            BankNiftyOptionsTradeHistory.order_id.like(f"{user_id}_%")
+        )
+        .order_by(BankNiftyOptionsTradeHistory.trade_entry_time.desc())
+        .all()
+    )
+    return trades
+
+
+

@@ -125,3 +125,25 @@ class TradeExitRequest(BaseModel):
 
 
 
+class OptionsOpenTradeRequest(BaseModel):
+    order_id: str
+    option_symbol: str
+    option_type: str  # 'CE' or 'PE'
+    trade_type: str   # 'BUY' or 'SELL'
+    quantity: int
+    entry_ltp: float
+    trade_entry_time: datetime
+
+
+class OptionsCloseTradeRequest(BaseModel):
+    user_id: int
+    exit_ltp: float
+    trade_exit_time: datetime
+
+
+class OptionTradeHistoryRequest(BaseModel):
+    user_id: int
+    flag: int  # 1D=1, 1W=2, 1M=3, 1Y=4, ALL=5
+    limit: Optional[int] = 1000
+    offset: Optional[int] = 0
+
