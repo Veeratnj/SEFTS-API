@@ -143,7 +143,9 @@ class OptionsCloseTradeRequest(BaseModel):
 
 class OptionTradeHistoryRequest(BaseModel):
     user_id: int
-    flag: int  # 1D=1, 1W=2, 1M=3, 1Y=4, ALL=5
+    flag: Optional[int]  # 1D=1, 1W=2, 1M=3, 1Y=4, ALL=5
     limit: Optional[int] = 1000
     offset: Optional[int] = 0
+    from_date: Optional[datetime] = None
+    to_date: Optional[datetime] = None
 

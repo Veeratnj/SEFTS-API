@@ -17,6 +17,8 @@ from datetime import datetime, timedelta
 
 from datetime import datetime, date
 
+from app.services.options_service import options_history
+
 
 router = APIRouter()
 
@@ -98,53 +100,11 @@ def get_closed_trades(user_id: int, db: Session = Depends(get_db)):
 
 @router.post("/option/trade-history")
 def get_option_trade_history(filters: OptionTradeHistoryRequest, db: Session = Depends(get_db)):
-    # Date range based on flag
-    today = datetime.now()
-    if filters.flag == 1:  # 1D
-        start_date = today.replace(hour=0, minute=0, second=0, microsecond=0)
-    elif filters.flag == 2:  # 1W
-        start_date = today - timedelta(days=7)
-    elif filters.flag == 3:  # 1M
-        start_date = today - timedelta(days=30)
-    elif filters.flag == 4:  # 1Y
-        start_date = today - timedelta(days=365)
-    else:  # ALL
-        start_date = None
-
-    query = db.query(BankNiftyOptionsTradeHistory).filter(
-        BankNiftyOptionsTradeHistory.order_id.like(f"{filters.user_id}_%"),
-        BankNiftyOptionsTradeHistory.trade_type == "BUY",  # only BUY entries
-        BankNiftyOptionsTradeHistory.exit_price.isnot(None)
-    )
-
-    if start_date:
-        query = query.filter(BankNiftyOptionsTradeHistory.trade_entry_time >= start_date)
-
-    trades = query.order_by(BankNiftyOptionsTradeHistory.trade_entry_time.desc()) \
-                  .offset(filters.offset) \
-                  .limit(filters.limit) \
-                  .all()
-
-    results = []
-    for t in trades:
-        results.append({
-            "option_symbol": t.option_symbol,
-            "option_type": t.option_type,
-            "entry_ltp": t.entry_ltp,
-            "exit_ltp": t.exit_ltp,
-            "entry_price": t.entry_price,
-            "exit_price": t.exit_price,
-            "pnl": round((t.exit_price or 0) - t.entry_price, 2),
-            "quantity": t.quantity,
-            "trade_entry_time": t.trade_entry_time.isoformat(),
-            "trade_exit_time": t.trade_exit_time.isoformat() if t.trade_exit_time else None
-        })
-
-    return {
-        "data": {
-            "records": results,
-            "total": len(results)
-        }
-    }
-
+    try:
+        # r=options_history(filters=filters,db=db)
+        # print(r)
+        return options_history(filters=filters,db=db)
+    except Exception as e:
+        print(e)
+    
 
