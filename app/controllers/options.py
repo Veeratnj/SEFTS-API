@@ -78,6 +78,8 @@ def get_closed_trades(user_id: int, db: Session = Depends(get_db)):
             "option_symbol": trade.option_symbol,
             "quantity": trade.quantity,
             "entry_price": trade.entry_price,
+            "entry_ltp": trade.entry_ltp,
+            "exit_ltp": trade.exit_ltp,
             "exit_price": trade.exit_price,
             "pnl": pnl,
             "entry_time": trade.trade_entry_time,
