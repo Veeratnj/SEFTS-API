@@ -1,5 +1,6 @@
 import json
 from typing import List
+from app.db import db
 from app.models.models import BankNiftyOptionsTradeHistory, EquityTradeHistory, OrderManager, StockDetails, UserActiveStrategy
 from app.schemas.schema import CommonResponse, OptionTradeHistoryRequest, TradeHistoryRequest, TradeHistoryResponse
 from fastapi import APIRouter, HTTPException ,Depends, Query
@@ -8,6 +9,7 @@ from app.services.login_services import authenticate_user
 from app.cryptography.crypt import decrypt
 from sqlalchemy.orm import Session
 from app.db.db import get_db
+from sqlalchemy.orm import aliased
 
 
 from fastapi import APIRouter, Depends
@@ -28,23 +30,90 @@ router = APIRouter()
 
 
 
-@router.get("/trade/open/{user_id}")
-def get_open_trades(user_id: int, db: Session = Depends(get_db)):
+@router.get("/trade/open1/{user_id}")
+def get_open_trades1(user_id: int, db: Session = Depends(get_db)):
     today = date.today()  # e.g., 2025-08-03
 
-    trades = (
-        db.query(BankNiftyOptionsTradeHistory)
-        .filter(
-            BankNiftyOptionsTradeHistory.trade_type == "BUY",
-            BankNiftyOptionsTradeHistory.exit_price.is_(None),
-            BankNiftyOptionsTradeHistory.order_id.like(f"{user_id}_%"),
-            BankNiftyOptionsTradeHistory.trade_entry_time >= datetime.combine(today, datetime.min.time()),
-            BankNiftyOptionsTradeHistory.trade_entry_time <= datetime.combine(today, datetime.max.time())
+    # trades = (
+    #     db.query(BankNiftyOptionsTradeHistory)
+    #     .join(StockDetails,BankNiftyOptionsTradeHistory.option_symbol==StockDetails.token)
+    #     .filter(
+    #         BankNiftyOptionsTradeHistory.trade_type == "BUY",
+    #         BankNiftyOptionsTradeHistory.exit_price.is_(None),
+    #         BankNiftyOptionsTradeHistory.order_id.like(f"{user_id}_%"),
+    #         BankNiftyOptionsTradeHistory.trade_entry_time >= datetime.combine(today, datetime.min.time()),
+    #         BankNiftyOptionsTradeHistory.trade_entry_time <= datetime.combine(today, datetime.max.time())
+    #     )
+    #     .order_by(BankNiftyOptionsTradeHistory.trade_entry_time.desc())
+    #     .all()
+    # )
+    bnoth = aliased(BankNiftyOptionsTradeHistory)
+    sd = aliased(StockDetails)
+
+    query = (
+        db.query(
+            bnoth.option_symbol,
+            bnoth.option_type,
+            bnoth.quantity,
+            bnoth.entry_ltp,
+            bnoth.trade_entry_time,
+            sd.ltp.label("current_ltp"),
+            ((sd.ltp - bnoth.entry_ltp) * bnoth.quantity).label("Profit")
         )
-        .order_by(BankNiftyOptionsTradeHistory.trade_entry_time.desc())
-        .all()
+        .outerjoin(sd, sd.token == bnoth.option_symbol)  # LEFT JOIN
+        .filter(bnoth.order_id.like("3%"))
     )
-    return trades
+    result = query.all()
+
+    print(result)
+    return result
+
+
+@router.get("/trade/open/{user_id}")
+def get_open_trades(user_id: int, db: Session = Depends(get_db)):
+    today = date.today()
+
+    bnoth = aliased(BankNiftyOptionsTradeHistory)
+    sd = aliased(StockDetails)
+
+    query = (
+        db.query(
+            bnoth.option_symbol,
+            bnoth.option_type,
+            bnoth.quantity,
+            bnoth.entry_ltp,
+            bnoth.trade_entry_time,
+            bnoth.entry_price,
+            sd.ltp.label("current_ltp"),
+            ((sd.ltp - bnoth.entry_ltp) * bnoth.quantity).label("Profit")
+        )
+        .outerjoin(sd, sd.token == bnoth.option_symbol)  # LEFT JOIN
+        .filter(
+            bnoth.trade_type == "BUY",
+            bnoth.exit_price.is_(None),
+            bnoth.order_id.like(f"{user_id}_%"),
+            bnoth.trade_entry_time >= datetime.combine(today, datetime.min.time()),
+            bnoth.trade_entry_time <= datetime.combine(today, datetime.max.time())
+        )
+        .order_by(bnoth.trade_entry_time.desc())
+    )
+
+    # Convert to structured dict list
+    results = [
+        {
+            "option_symbol": r.option_symbol,
+            "option_type": r.option_type,
+            "quantity": r.quantity,
+            "entry_ltp": r.entry_ltp,
+            "entry_price":r.entry_price,
+            "trade_entry_time": r.trade_entry_time,
+            "current_ltp": r.current_ltp,
+            "profit": r.Profit
+        }
+        for r in query.all()
+    ]
+
+    return results
 
 
 
