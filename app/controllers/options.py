@@ -2,7 +2,7 @@ import json
 from typing import List
 from app.db import db
 from app.models.models import BankNiftyOptionsTradeHistory, EquityTradeHistory, OrderManager, StockDetails, UserActiveStrategy
-from app.schemas.schema import CommonResponse, OptionTradeHistoryRequest, TradeHistoryRequest, TradeHistoryResponse
+from app.schemas.schema import CommonResponse, OptionTradeHistoryRequest, OptionsLTPRequest, TradeHistoryRequest, TradeHistoryResponse
 from fastapi import APIRouter, HTTPException ,Depends, Query
 from pydantic import BaseModel
 from app.services.login_services import authenticate_user
@@ -178,4 +178,36 @@ def get_option_trade_history(filters: OptionTradeHistoryRequest, db: Session = D
     except Exception as e:
         print(e)
     
+
+from datetime import datetime
+
+@router.post("/insert-or-update-ltp")
+def insert_or_update_ltp(payload: OptionsLTPRequest, db: Session = Depends(get_db)):
+    try:
+        existing_record = db.query(StockDetails).filter(StockDetails.token == payload.option_symbol).first()
+        
+        if existing_record:
+            # Update existing record
+            existing_record.ltp = payload.ltp
+            existing_record.last_update = datetime.utcnow()
+            db.commit()
+            return {"message": "LTP updated successfully"}
+        else:
+            # Insert new record
+            new_record = StockDetails(
+                stock_name=payload.option_symbol,
+                token=payload.option_symbol,
+                ltp=payload.ltp,
+                symbol=payload.option_symbol,
+                last_update=datetime.utcnow()
+            )
+            db.add(new_record)
+            db.commit()
+            return {"message": "LTP inserted successfully"}
+    except Exception as e:
+        db.rollback()
+        print(f"Error inserting/updating LTP: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+  
+
 

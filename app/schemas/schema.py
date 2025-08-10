@@ -149,3 +149,7 @@ class OptionTradeHistoryRequest(BaseModel):
     from_date: Optional[datetime] = None
     to_date: Optional[datetime] = None
 
+
+class OptionsLTPRequest(BaseModel):
+    option_symbol: str
+    ltp: float
