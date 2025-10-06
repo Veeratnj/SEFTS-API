@@ -3,7 +3,7 @@
 from sqladmin import Admin, ModelView
 from fastapi import FastAPI
 from app.db.db import engine  # your engine
-from app.models.models import User, Strategy, StockDetails, UserActiveStrategy, OrderManager, EquityTradeHistory, LoginTrack,Stocks
+from app.models.models import BankNiftyOptionsTradeHistory, User, Strategy, StockDetails, UserActiveStrategy, OrderManager, EquityTradeHistory, LoginTrack,Stocks
 
 # Admin Views
 class UserAdmin(ModelView, model=User):
@@ -32,6 +32,26 @@ class LoginTrackAdmin(ModelView, model=LoginTrack):
 class StocksAdmin(ModelView, model=Stocks):
     column_list = [Stocks.id, Stocks.stock_name, Stocks.token, Stocks.exchange, Stocks.is_hotlist, Stocks.trend_type, Stocks.created_at, Stocks.updated_at, Stocks.created_by, Stocks.is_deleted]
 
+class BankNiftyOptionsTradeHistoryAdmin(ModelView, model=BankNiftyOptionsTradeHistory):
+    column_list = [
+        BankNiftyOptionsTradeHistory.id,
+        BankNiftyOptionsTradeHistory.order_id,
+        BankNiftyOptionsTradeHistory.option_symbol,
+        BankNiftyOptionsTradeHistory.option_type,
+        BankNiftyOptionsTradeHistory.trade_type,
+        BankNiftyOptionsTradeHistory.quantity,
+        BankNiftyOptionsTradeHistory.entry_ltp,
+        BankNiftyOptionsTradeHistory.exit_ltp,
+        BankNiftyOptionsTradeHistory.entry_price,
+        BankNiftyOptionsTradeHistory.exit_price,
+        BankNiftyOptionsTradeHistory.trade_entry_time,
+        BankNiftyOptionsTradeHistory.trade_exit_time,
+    ]
+    column_searchable_list = [BankNiftyOptionsTradeHistory.order_id, BankNiftyOptionsTradeHistory.option_symbol]
+    column_sortable_list = [BankNiftyOptionsTradeHistory.trade_entry_time, BankNiftyOptionsTradeHistory.trade_exit_time]
+
+
+
 
 
 # Attach to app
@@ -45,3 +65,4 @@ def setup_admin(app: FastAPI):
     admin.add_view(EquityTradeHistoryAdmin)
     admin.add_view(LoginTrackAdmin)
     admin.add_view(StocksAdmin)
+    admin.add_view(BankNiftyOptionsTradeHistoryAdmin)
