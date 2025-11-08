@@ -3,7 +3,7 @@
 from sqladmin import Admin, ModelView
 from fastapi import FastAPI
 from app.db.db import engine  # your engine
-from app.models.models import BankNiftyOptionsTradeHistory, User, Strategy, StockDetails, UserActiveStrategy, OrderManager, EquityTradeHistory, LoginTrack,Stocks
+from app.models.models import BankNiftyOptionsTradeHistory, OptionKillStatus, User, Strategy, StockDetails, UserActiveStrategy, OrderManager, EquityTradeHistory, LoginTrack,Stocks
 
 # Admin Views
 class UserAdmin(ModelView, model=User):
@@ -50,6 +50,9 @@ class BankNiftyOptionsTradeHistoryAdmin(ModelView, model=BankNiftyOptionsTradeHi
     column_searchable_list = [BankNiftyOptionsTradeHistory.order_id, BankNiftyOptionsTradeHistory.option_symbol]
     column_sortable_list = [BankNiftyOptionsTradeHistory.trade_entry_time, BankNiftyOptionsTradeHistory.trade_exit_time]
 
+class OptionKillStatusAdmin(ModelView, model=OptionKillStatus):
+    column_list = [OptionKillStatus.id, OptionKillStatus.is_closed]
+
 
 
 
@@ -66,3 +69,4 @@ def setup_admin(app: FastAPI):
     admin.add_view(LoginTrackAdmin)
     admin.add_view(StocksAdmin)
     admin.add_view(BankNiftyOptionsTradeHistoryAdmin)
+    admin.add_view(OptionKillStatusAdmin)

@@ -2,7 +2,7 @@ from typing import List
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy.inspection import inspect
-from app.models.models import EquityTradeHistory, OrderManager, StockDetails, User, UserActiveStrategy, Stocks
+from app.models.models import EquityTradeHistory, OptionKillStatus, OrderManager, StockDetails, User, UserActiveStrategy, Stocks
 from app.schemas.schema import StockDetailsSchema,StocksSchema
 
 
@@ -80,3 +80,13 @@ def get_stockDetails_services(db: Session) -> List[StockDetailsSchema]:
         return [StockDetailsSchema.from_orm(detail) for detail in stock_details]
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving stock details: {str(e)}")
+    
+
+
+def get_option_kill_status_service(db: Session):    
+    try:
+        status = db.query(OptionKillStatus.is_closed).first()
+        print(status)
+        return status[0]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving option kill status: {str(e)}")

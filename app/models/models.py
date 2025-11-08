@@ -207,6 +207,17 @@ class BankNiftyOptionsTradeHistory(Base):
             f"entry_price={self.entry_price}, exit_price={self.exit_price}, "
             f"entry_time={self.trade_entry_time}, exit_time={self.trade_exit_time})>"
         )
+    
 
 
+class OptionKillStatus(Base):
+    __tablename__ = "options_kill_switch"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    is_closed = Column(Boolean, nullable=False, default=False)
+
+    def __repr__(self):
+        return (
+            f"<OptionKillStatus(id={self.id}, is_killed={self.is_closed}"
+        )
 
